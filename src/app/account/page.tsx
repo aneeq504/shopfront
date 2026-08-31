@@ -37,6 +37,7 @@ export default async function AccountPage() {
         </div>
         <ProfileForm
           name={customer.name}
+          email={customer.email}
           phone={customer.phone}
           address={customer.address}
         />

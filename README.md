@@ -25,7 +25,9 @@ Open http://localhost:3000. The admin panel is at http://localhost:3000/admin (l
 
 Customer:
 - Accounts: sign up and sign in at `/account/register` and `/account/login` (scrypt-hashed passwords, HMAC-signed cookie session)
-- `/account` shows saved contact details and the customer's own order history
+- Email OTP: every sign-up and sign-in is confirmed with a 6-digit code emailed to the customer (10-minute expiry, 5 attempts, single use)
+- `/account` shows saved contact details, a profile editor, and the customer's own order history
+- Profile changes (name, email, password, phone, address) only take effect after confirming a 6-digit code emailed to the address being used; changing email or password also requires the current password
 - Checkout requires being signed in and is prefilled from the account
 - Dark themed UI; product cards lift on hover
 - Products with zero stock are shown as "Out of stock" and cannot be added to the cart
@@ -48,7 +50,11 @@ Owner (admin only):
 | `DATABASE_URL` | SQLite connection string, e.g. `file:./dev.db` (resolved relative to `prisma/`) |
 | `ADMIN_PASSWORD` | Password for the owner login |
 | `ADMIN_SESSION_SECRET` | Secret used to sign the admin session cookie |
-| `CUSTOMER_SESSION_SECRET` | Secret used to sign customer session cookies |
+| `CUSTOMER_SESSION_SECRET` | Secret used to sign customer session cookies and hash OTP codes |
+| `SMTP_HOST` | SMTP server for OTP emails; when unset, codes are logged to the server console instead of sent |
+| `SMTP_PORT` | SMTP port (default `587`; `465` switches to implicit TLS) |
+| `SMTP_USER` / `SMTP_PASSWORD` | SMTP credentials (for Gmail, an app password) |
+| `SMTP_FROM` | From address for outgoing mail (defaults to `SMTP_USER`) |
 
 ## Scripts
 

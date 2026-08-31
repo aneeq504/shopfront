@@ -31,6 +31,21 @@ model Customer {
   orders       Order[]
 }
 
+model VerificationCode {
+  id         String    @id @default(cuid())
+  email      String
+  purpose    String
+  codeHash   String
+  payload    String    @default("")
+  customerId String?
+  attempts   Int       @default(0)
+  expiresAt  DateTime
+  consumedAt DateTime?
+  createdAt  DateTime  @default(now())
+
+  @@index([email, purpose])
+}
+
 model Order {
   id            String      @id @default(cuid())
   customerId    String?
