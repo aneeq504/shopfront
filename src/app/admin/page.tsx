@@ -24,7 +24,7 @@ export default async function AdminPage() {
         <div className="flex items-center gap-3">
           <Link
             href="/admin/products/new"
-            className="rounded bg-orange-500 px-4 py-2 text-sm font-medium text-white hover:bg-orange-600"
+            className="btn-primary text-sm"
           >
             Add product
           </Link>
@@ -34,9 +34,9 @@ export default async function AdminPage() {
 
       <section className="flex flex-col gap-3">
         <h2 className="text-lg font-medium">Products ({products.length})</h2>
-        <div className="divide-y divide-gray-200 rounded-lg border border-gray-200 bg-white">
+        <div className="card divide-y divide-slate-800">
           {products.length === 0 ? (
-            <p className="p-6 text-sm text-gray-500">No products yet.</p>
+            <p className="p-6 text-sm text-slate-400">No products yet.</p>
           ) : (
             products.map((product) => (
               <AdminProductRow
@@ -56,26 +56,26 @@ export default async function AdminPage() {
 
       <section className="flex flex-col gap-3">
         <h2 className="text-lg font-medium">Orders ({orders.length})</h2>
-        <div className="divide-y divide-gray-200 rounded-lg border border-gray-200 bg-white">
+        <div className="card divide-y divide-slate-800">
           {orders.length === 0 ? (
-            <p className="p-6 text-sm text-gray-500">No orders yet.</p>
+            <p className="p-6 text-sm text-slate-400">No orders yet.</p>
           ) : (
             orders.map((order) => (
               <div key={order.id} className="flex flex-col gap-1 p-4 text-sm">
                 <div className="flex justify-between">
                   <span className="font-medium">{order.customerName}</span>
-                  <span className="font-semibold text-orange-600">
+                  <span className="font-semibold text-amber-400">
                     {formatPrice(order.totalCents)}
                   </span>
                 </div>
-                <span className="w-fit rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-700">
+                <span className="w-fit rounded-full bg-slate-800 px-2 py-0.5 text-xs text-slate-300">
                   {orderStateLabel(orderState(order))}
                 </span>
-                <span className="text-gray-500">
+                <span className="text-slate-400">
                   {order.customerEmail} &middot; {order.customerPhone || "no phone"} &middot;{" "}
                   {order.address}
                 </span>
-                <span className="text-gray-500">
+                <span className="text-slate-400">
                   {order.items
                     .map((item) => `${item.productName} x${item.quantity}`)
                     .join(", ")}

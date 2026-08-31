@@ -28,11 +28,11 @@ export function CancelOrderButton({ orderId }: { orderId: string }) {
         type="button"
         onClick={onCancel}
         disabled={submitting}
-        className="w-fit rounded border border-red-300 px-4 py-2 text-sm text-red-600 hover:bg-red-50 disabled:opacity-50"
+        className="w-fit rounded-lg border border-red-500/40 px-4 py-2 text-sm text-red-400 transition hover:bg-red-500/10 disabled:opacity-50"
       >
         {submitting ? "Cancelling..." : "Cancel order"}
       </button>
-      {error && <p className="text-sm text-red-600">{error}</p>}
+      {error && <p className="text-sm text-red-400">{error}</p>}
     </div>
   );
 }

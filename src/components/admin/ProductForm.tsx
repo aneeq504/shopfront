@@ -49,7 +49,7 @@ export function ProductForm({
   return (
     <form
       onSubmit={onSubmit}
-      className="flex max-w-xl flex-col gap-4 rounded-lg border border-gray-200 bg-white p-6"
+      className="card flex max-w-xl flex-col gap-4 p-6"
     >
       <label className="text-sm font-medium">
         Name
@@ -57,16 +57,16 @@ export function ProductForm({
           name="name"
           required
           defaultValue={initialValues.name}
-          className="mt-1 w-full rounded border border-gray-300 px-3 py-2"
+          className="input mt-1 w-full"
         />
       </label>
-      <label className="text-sm font-medium">
+      <label className="text-sm font-medium text-slate-200">
         Description
         <textarea
           name="description"
           rows={4}
           defaultValue={initialValues.description}
-          className="mt-1 w-full rounded border border-gray-300 px-3 py-2"
+          className="input mt-1 w-full"
         />
       </label>
       <div className="grid grid-cols-2 gap-4">
@@ -79,7 +79,7 @@ export function ProductForm({
             min="0"
             required
             defaultValue={initialValues.price}
-            className="mt-1 w-full rounded border border-gray-300 px-3 py-2"
+            className="input mt-1 w-full"
           />
         </label>
         <label className="text-sm font-medium">
@@ -90,7 +90,7 @@ export function ProductForm({
             min="0"
             required
             defaultValue={initialValues.stock}
-            className="mt-1 w-full rounded border border-gray-300 px-3 py-2"
+            className="input mt-1 w-full"
           />
         </label>
       </div>
@@ -99,7 +99,7 @@ export function ProductForm({
         <input
           name="category"
           defaultValue={initialValues.category}
-          className="mt-1 w-full rounded border border-gray-300 px-3 py-2"
+          className="input mt-1 w-full"
         />
       </label>
       <label className="text-sm font-medium">
@@ -108,15 +108,11 @@ export function ProductForm({
           name="imageUrl"
           defaultValue={initialValues.imageUrl}
           placeholder="https://..."
-          className="mt-1 w-full rounded border border-gray-300 px-3 py-2"
+          className="input mt-1 w-full"
         />
       </label>
-      {error && <p className="text-sm text-red-600">{error}</p>}
-      <button
-        type="submit"
-        disabled={submitting}
-        className="rounded bg-orange-500 px-4 py-2 font-medium text-white hover:bg-orange-600 disabled:bg-gray-300"
-      >
+      {error && <p className="text-sm text-red-400">{error}</p>}
+      <button type="submit" disabled={submitting} className="btn-primary">
         {submitting ? "Saving..." : "Save product"}
       </button>
     </form>

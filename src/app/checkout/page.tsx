@@ -39,7 +39,7 @@ export default function CheckoutPage() {
 
   if (items.length === 0) {
     return (
-      <p className="rounded border border-dashed border-gray-300 bg-white p-10 text-center text-gray-500">
+      <p className="rounded-xl border border-dashed border-slate-700 bg-slate-900/50 p-10 text-center text-slate-400">
         Your cart is empty.
       </p>
     );
@@ -47,39 +47,35 @@ export default function CheckoutPage() {
 
   return (
     <div className="grid gap-8 md:grid-cols-[2fr_1fr]">
-      <form onSubmit={onSubmit} className="flex flex-col gap-4 rounded-lg border border-gray-200 bg-white p-6">
+      <form onSubmit={onSubmit} className="card flex flex-col gap-4 p-6">
         <h1 className="text-2xl font-semibold">Delivery details</h1>
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-slate-400">
           Payment is cash on delivery for now — no online payment required. You can cancel the
           order within 24 hours; after that it is sent for delivery.
         </p>
         <label className="text-sm font-medium">
           Full name
-          <input name="customerName" required className="mt-1 w-full rounded border border-gray-300 px-3 py-2" />
+          <input name="customerName" required className="input mt-1 w-full" />
         </label>
         <label className="text-sm font-medium">
           Email
-          <input name="customerEmail" type="email" required className="mt-1 w-full rounded border border-gray-300 px-3 py-2" />
+          <input name="customerEmail" type="email" required className="input mt-1 w-full" />
         </label>
         <label className="text-sm font-medium">
           Phone
-          <input name="customerPhone" className="mt-1 w-full rounded border border-gray-300 px-3 py-2" />
+          <input name="customerPhone" className="input mt-1 w-full" />
         </label>
         <label className="text-sm font-medium">
           Delivery address
-          <textarea name="address" required rows={3} className="mt-1 w-full rounded border border-gray-300 px-3 py-2" />
+          <textarea name="address" required rows={3} className="input mt-1 w-full" />
         </label>
-        {error && <p className="text-sm text-red-600">{error}</p>}
-        <button
-          type="submit"
-          disabled={submitting}
-          className="rounded bg-orange-500 px-5 py-2 font-medium text-white hover:bg-orange-600 disabled:bg-gray-300"
-        >
+        {error && <p className="text-sm text-red-400">{error}</p>}
+        <button type="submit" disabled={submitting} className="btn-primary px-5">
           {submitting ? "Placing order..." : "Place order"}
         </button>
       </form>
 
-      <aside className="h-fit rounded-lg border border-gray-200 bg-white p-6">
+      <aside className="card h-fit p-6">
         <h2 className="mb-4 text-lg font-semibold">Order summary</h2>
         <ul className="flex flex-col gap-2 text-sm">
           {items.map((item) => (
@@ -91,9 +87,9 @@ export default function CheckoutPage() {
             </li>
           ))}
         </ul>
-        <p className="mt-4 flex justify-between border-t border-gray-200 pt-4 font-bold">
+        <p className="mt-4 flex justify-between border-t border-slate-800 pt-4 font-bold">
           <span>Total</span>
-          <span className="text-orange-600">{formatPrice(totalCents)}</span>
+          <span className="text-amber-400">{formatPrice(totalCents)}</span>
         </p>
       </aside>
     </div>

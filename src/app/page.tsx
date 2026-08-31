@@ -26,25 +26,34 @@ export default async function HomePage({
 
   return (
     <div className="flex flex-col gap-6">
+      <section className="card flex flex-col gap-2 p-6">
+        <h1 className="text-3xl font-bold text-slate-100">
+          Everything you need, <span className="text-amber-400">delivered</span>
+        </h1>
+        <p className="muted text-sm">
+          Cash on delivery. Cancel free within 24 hours of ordering.
+        </p>
+      </section>
+
       <form className="flex gap-2">
         <input
           type="search"
           name="q"
           defaultValue={q}
           placeholder="Search products..."
-          className="w-full rounded border border-gray-300 px-3 py-2 text-sm"
+          className="input w-full text-sm"
         />
-        <button className="rounded bg-orange-500 px-4 py-2 text-sm font-medium text-white hover:bg-orange-600">
-          Search
-        </button>
+        <button className="btn-primary text-sm">Search</button>
       </form>
 
       {categories.length > 0 && (
         <div className="flex flex-wrap gap-2 text-sm">
           <Link
             href="/"
-            className={`rounded-full border px-3 py-1 ${
-              category ? "border-gray-300 bg-white" : "border-orange-500 bg-orange-100"
+            className={`rounded-full border px-3 py-1 transition ${
+              category
+                ? "border-slate-700 bg-slate-900 text-slate-300 hover:border-slate-500"
+                : "border-amber-500 bg-amber-500/10 text-amber-400"
             }`}
           >
             All
@@ -53,8 +62,10 @@ export default async function HomePage({
             <Link
               key={c}
               href={`/?category=${encodeURIComponent(c)}`}
-              className={`rounded-full border px-3 py-1 ${
-                category === c ? "border-orange-500 bg-orange-100" : "border-gray-300 bg-white"
+              className={`rounded-full border px-3 py-1 transition ${
+                category === c
+                  ? "border-amber-500 bg-amber-500/10 text-amber-400"
+                  : "border-slate-700 bg-slate-900 text-slate-300 hover:border-slate-500"
               }`}
             >
               {c}
@@ -64,7 +75,7 @@ export default async function HomePage({
       )}
 
       {products.length === 0 ? (
-        <p className="rounded border border-dashed border-gray-300 bg-white p-10 text-center text-gray-500">
+        <p className="rounded-xl border border-dashed border-slate-700 bg-slate-900/50 p-10 text-center text-slate-400">
           No products yet. The store owner can add products from the admin panel.
         </p>
       ) : (

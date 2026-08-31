@@ -24,6 +24,8 @@ Open http://localhost:3000. The admin panel is at http://localhost:3000/admin (l
 ## Features
 
 Customer:
+- Dark themed UI; product cards lift on hover
+- Products with zero stock are shown as "Out of stock" and cannot be added to the cart
 - Product grid with search and category filters
 - Product detail pages
 - Cart with quantity editing, persisted between visits
@@ -33,6 +35,7 @@ Customer:
 Owner (admin only):
 - Password login at `/admin/login`
 - Create, edit, and delete products (name, description, price, stock, category, image URL)
+- Adjust the stock quantity of any product inline from the product list (+ / − or typed value)
 - View all placed orders with customer, item details, and current state (pending / cancelled / sent for delivery)
 
 ## Environment variables

@@ -30,7 +30,7 @@ export default function AdminLoginPage() {
   return (
     <form
       onSubmit={onSubmit}
-      className="mx-auto flex max-w-sm flex-col gap-4 rounded-lg border border-gray-200 bg-white p-6"
+      className="card mx-auto flex max-w-sm flex-col gap-4 p-6"
     >
       <h1 className="text-xl font-semibold">Owner login</h1>
       <input
@@ -38,14 +38,10 @@ export default function AdminLoginPage() {
         type="password"
         required
         placeholder="Admin password"
-        className="rounded border border-gray-300 px-3 py-2"
+        className="input"
       />
-      {error && <p className="text-sm text-red-600">{error}</p>}
-      <button
-        type="submit"
-        disabled={submitting}
-        className="rounded bg-orange-500 px-4 py-2 font-medium text-white hover:bg-orange-600 disabled:bg-gray-300"
-      >
+      {error && <p className="text-sm text-red-400">{error}</p>}
+      <button type="submit" disabled={submitting} className="btn-primary">
         {submitting ? "Signing in..." : "Sign in"}
       </button>
     </form>

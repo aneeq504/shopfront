@@ -20,6 +20,30 @@ export async function PUT(
   return NextResponse.json({ ok: true });
 }
 
+export async function PATCH(
+  request: Request,
+  { params }: { params: { id: string } },
+) {
+  if (!isAdmin()) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const body = (await request.json()) as { stock?: unknown };
+  const stock = Number(body.stock);
+  if (!Number.isFinite(stock) || stock < 0) {
+    return NextResponse.json(
+      { error: "Stock must be a positive number" },
+      { status: 400 },
+    );
+  }
+
+  const product = await prisma.product.update({
+    where: { id: params.id },
+    data: { stock: Math.floor(stock) },
+  });
+  return NextResponse.json({ stock: product.stock });
+}
+
 export async function DELETE(
   _request: Request,
   { params }: { params: { id: string } },

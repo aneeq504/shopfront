@@ -3,21 +3,40 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --background: #0b1120;
+  --foreground: #e2e8f0;
 }
 
 body {
   color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  background:
+    radial-gradient(60rem 40rem at 15% -10%, rgba(245, 158, 11, 0.12), transparent),
+    radial-gradient(50rem 35rem at 90% 0%, rgba(56, 189, 248, 0.1), transparent),
+    var(--background);
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+
+@layer components {
+  .card {
+    @apply rounded-xl border border-slate-800 bg-slate-900/70 shadow-lg shadow-black/20 backdrop-blur;
+  }
+
+  .input {
+    @apply rounded-lg border border-slate-700 bg-slate-950/60 px-3 py-2 text-slate-100 placeholder:text-slate-500 outline-none transition focus:border-amber-500 focus:ring-1 focus:ring-amber-500;
+  }
+
+  .btn-primary {
+    @apply rounded-lg bg-amber-500 px-4 py-2 font-medium text-slate-950 transition hover:bg-amber-400 disabled:cursor-not-allowed disabled:bg-slate-700 disabled:text-slate-400;
+  }
+
+  .btn-ghost {
+    @apply rounded-lg border border-slate-700 px-4 py-2 text-slate-200 transition hover:border-slate-500 hover:bg-slate-800;
+  }
+
+  .muted {
+    @apply text-slate-400;
+  }
 }
 
 @layer utilities {

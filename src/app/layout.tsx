@@ -26,9 +26,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="dark">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} bg-gray-50 text-gray-900 antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} text-slate-200 antialiased`}
       >
         <CartProvider>
           <Header />
