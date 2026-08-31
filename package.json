@@ -1,0 +1,44 @@
+{
+  "name": "shopfront",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "postinstall": "prisma generate",
+    "db:setup": "prisma migrate deploy && prisma db seed",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.13.0",
+    "next": "14.2.35",
+    "react": "^18",
+    "react-dom": "^18"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "dotenv": "^16.4.7",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.35",
+    "postcss": "^8",
+    "prisma": "^6.13.0",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
+  },
+  "overrides": {
+    "@typescript-eslint/visitor-keys": "8.68.0",
+    "@typescript-eslint/types": "8.68.0",
+    "@typescript-eslint/typescript-estree": "8.68.0",
+    "@typescript-eslint/scope-manager": "8.68.0",
+    "@typescript-eslint/utils": "8.68.0",
+    "@typescript-eslint/parser": "8.68.0",
+    "@typescript-eslint/eslint-plugin": "8.68.0",
+    "@typescript-eslint/type-utils": "8.68.0",
+    "@typescript-eslint/project-service": "8.68.0",
+    "@typescript-eslint/tsconfig-utils": "8.68.0"
+  }
+}
