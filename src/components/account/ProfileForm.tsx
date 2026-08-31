@@ -70,7 +70,11 @@ export function ProfileForm({ name, email, phone, address }: Props) {
   }
 
   return (
-    <form onSubmit={onSubmit} className="card flex flex-col gap-3 p-6">
+    <form
+      key={`${name}|${email}|${phone}|${address}`}
+      onSubmit={onSubmit}
+      className="card flex flex-col gap-3 p-6"
+    >
       <h2 className="text-lg font-semibold">Profile</h2>
       <p className="text-sm text-slate-400">
         Every change is confirmed with a 6-digit code emailed to you.
