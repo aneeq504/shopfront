@@ -50,7 +50,8 @@ export default function CheckoutPage() {
       <form onSubmit={onSubmit} className="flex flex-col gap-4 rounded-lg border border-gray-200 bg-white p-6">
         <h1 className="text-2xl font-semibold">Delivery details</h1>
         <p className="text-sm text-gray-500">
-          Payment is cash on delivery for now — no online payment required.
+          Payment is cash on delivery for now — no online payment required. You can cancel the
+          order within 24 hours; after that it is sent for delivery.
         </p>
         <label className="text-sm font-medium">
           Full name

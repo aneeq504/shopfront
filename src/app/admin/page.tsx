@@ -4,6 +4,7 @@ import { AdminProductRow } from "@/components/admin/AdminProductRow";
 import { LogoutButton } from "@/components/admin/LogoutButton";
 import { isAdmin } from "@/lib/auth";
 import { formatPrice } from "@/lib/format";
+import { orderState, orderStateLabel } from "@/lib/orders";
 import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
@@ -67,6 +68,9 @@ export default async function AdminPage() {
                     {formatPrice(order.totalCents)}
                   </span>
                 </div>
+                <span className="w-fit rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-700">
+                  {orderStateLabel(orderState(order))}
+                </span>
                 <span className="text-gray-500">
                   {order.customerEmail} &middot; {order.customerPhone || "no phone"} &middot;{" "}
                   {order.address}

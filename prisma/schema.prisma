@@ -27,7 +27,7 @@ model Order {
   customerPhone String      @default("")
   address       String
   totalCents    Int
-  status        String      @default("PENDING")
+  cancelledAt   DateTime?
   createdAt     DateTime    @default(now())
   items         OrderItem[]
 }

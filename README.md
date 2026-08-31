@@ -28,11 +28,12 @@ Customer:
 - Product detail pages
 - Cart with quantity editing, persisted between visits
 - Checkout with delivery details; order confirmation page
+- 24-hour cancellation window: an order can be cancelled from its confirmation page for 24 hours (stock is returned), after which it is marked "Sent for delivery"
 
 Owner (admin only):
 - Password login at `/admin/login`
 - Create, edit, and delete products (name, description, price, stock, category, image URL)
-- View all placed orders with customer and item details
+- View all placed orders with customer, item details, and current state (pending / cancelled / sent for delivery)
 
 ## Environment variables
 
