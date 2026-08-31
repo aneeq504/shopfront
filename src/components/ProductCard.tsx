@@ -15,7 +15,7 @@ export function ProductCard({ product }: { product: ProductCardData }) {
   const outOfStock = product.stock <= 0;
 
   return (
-    <div className="card group relative flex flex-col overflow-hidden transition duration-200 hover:-translate-y-2 hover:scale-[1.03] hover:border-amber-500/60 hover:shadow-2xl hover:shadow-amber-500/10">
+    <div className="card product-card group relative flex flex-col overflow-hidden">
       <Link href={`/products/${product.id}`} className="block">
         <div className="relative aspect-square w-full overflow-hidden bg-slate-800">
           {product.imageUrl ? (
@@ -23,7 +23,7 @@ export function ProductCard({ product }: { product: ProductCardData }) {
             <img
               src={product.imageUrl}
               alt={product.name}
-              className={`h-full w-full object-cover transition duration-300 group-hover:scale-105 ${
+              className={`h-full w-full object-cover transition duration-500 group-hover:scale-105 ${
                 outOfStock ? "opacity-40 grayscale" : ""
               }`}
             />

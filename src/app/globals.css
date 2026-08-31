@@ -37,6 +37,37 @@ body {
   .muted {
     @apply text-slate-400;
   }
+
+  .product-card {
+    transition:
+      transform 450ms cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 450ms ease,
+      box-shadow 450ms ease,
+      border-color 450ms ease;
+    will-change: transform;
+  }
+
+  .product-grid:hover .product-card {
+    transform: scale(0.94);
+    opacity: 0.55;
+  }
+
+  .product-grid .product-card:hover {
+    z-index: 10;
+    transform: scale(1.12) translateY(-14px);
+    opacity: 1;
+    @apply border-amber-500/60 shadow-2xl shadow-amber-500/20;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .product-card,
+    .product-grid:hover .product-card,
+    .product-grid .product-card:hover {
+      transform: none;
+      opacity: 1;
+      transition: none;
+    }
+  }
 }
 
 @layer utilities {
