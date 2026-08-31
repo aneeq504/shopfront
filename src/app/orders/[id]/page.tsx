@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CancelOrderButton } from "@/components/CancelOrderButton";
+import { currentCustomerId } from "@/lib/customer-auth";
 import { formatPrice } from "@/lib/format";
 import {
   CANCELLATION_WINDOW_HOURS,
@@ -19,6 +20,7 @@ export default async function OrderPage({ params }: { params: { id: string } }) 
     include: { items: true },
   });
   if (!order) notFound();
+  if (order.customerId && order.customerId !== currentCustomerId()) notFound();
 
   const state = orderState(order);
 

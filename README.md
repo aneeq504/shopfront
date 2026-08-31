@@ -24,6 +24,9 @@ Open http://localhost:3000. The admin panel is at http://localhost:3000/admin (l
 ## Features
 
 Customer:
+- Accounts: sign up and sign in at `/account/register` and `/account/login` (scrypt-hashed passwords, HMAC-signed cookie session)
+- `/account` shows saved contact details and the customer's own order history
+- Checkout requires being signed in and is prefilled from the account
 - Dark themed UI; product cards lift on hover
 - Products with zero stock are shown as "Out of stock" and cannot be added to the cart
 - Product grid with search and category filters
@@ -45,6 +48,7 @@ Owner (admin only):
 | `DATABASE_URL` | SQLite connection string, e.g. `file:./dev.db` (resolved relative to `prisma/`) |
 | `ADMIN_PASSWORD` | Password for the owner login |
 | `ADMIN_SESSION_SECRET` | Secret used to sign the admin session cookie |
+| `CUSTOMER_SESSION_SECRET` | Secret used to sign customer session cookies |
 
 ## Scripts
 

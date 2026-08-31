@@ -20,8 +20,21 @@ model Product {
   orderItems  OrderItem[]
 }
 
+model Customer {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String
+  phone        String   @default("")
+  address      String   @default("")
+  passwordHash String
+  createdAt    DateTime @default(now())
+  orders       Order[]
+}
+
 model Order {
   id            String      @id @default(cuid())
+  customerId    String?
+  customer      Customer?   @relation(fields: [customerId], references: [id])
   customerName  String
   customerEmail String
   customerPhone String      @default("")

@@ -1,23 +1,31 @@
 import { NextResponse } from "next/server";
+import { currentCustomer } from "@/lib/customer-auth";
 import { prisma } from "@/lib/prisma";
 
 type OrderRequestItem = { productId: string; quantity: number };
 
 type OrderRequest = {
   customerName?: string;
-  customerEmail?: string;
   customerPhone?: string;
   address?: string;
   items?: OrderRequestItem[];
 };
 
 export async function POST(request: Request) {
-  const body = (await request.json()) as OrderRequest;
-  const { customerName, customerEmail, customerPhone, address, items } = body;
-
-  if (!customerName || !customerEmail || !address || !items?.length) {
+  const customer = await currentCustomer();
+  if (!customer) {
     return NextResponse.json(
-      { error: "Name, email, address and at least one item are required" },
+      { error: "Sign in to place an order" },
+      { status: 401 },
+    );
+  }
+
+  const body = (await request.json()) as OrderRequest;
+  const { customerName, customerPhone, address, items } = body;
+
+  if (!customerName || !address || !items?.length) {
+    return NextResponse.json(
+      { error: "Name, address and at least one item are required" },
       { status: 400 },
     );
   }
@@ -45,8 +53,9 @@ export async function POST(request: Request) {
     const order = await prisma.$transaction(async (tx) => {
       const created = await tx.order.create({
         data: {
+          customerId: customer.id,
           customerName,
-          customerEmail,
+          customerEmail: customer.email,
           customerPhone: customerPhone ?? "",
           address,
           totalCents: lineItems.reduce(

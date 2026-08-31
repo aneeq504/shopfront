@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { currentCustomerId } from "@/lib/customer-auth";
 import { CANCELLATION_WINDOW_HOURS, orderState } from "@/lib/orders";
 import { prisma } from "@/lib/prisma";
 
@@ -13,6 +14,10 @@ export async function POST(
 
   if (!order) {
     return NextResponse.json({ error: "Order not found" }, { status: 404 });
+  }
+
+  if (order.customerId && order.customerId !== currentCustomerId()) {
+    return NextResponse.json({ error: "Not your order" }, { status: 403 });
   }
 
   const state = orderState(order);

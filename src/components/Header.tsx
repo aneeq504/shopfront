@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useCart } from "./CartProvider";
 
-export function Header() {
+export function Header({ customerName }: { customerName: string | null }) {
   const { totalQuantity } = useCart();
 
   return (
@@ -19,6 +19,12 @@ export function Header() {
           </Link>
           <Link href="/admin" className="text-slate-300 transition hover:text-amber-400">
             Admin
+          </Link>
+          <Link
+            href={customerName ? "/account" : "/account/login"}
+            className="text-slate-300 transition hover:text-amber-400"
+          >
+            {customerName ? customerName.split(" ")[0] : "Sign in"}
           </Link>
           <Link
             href="/cart"
