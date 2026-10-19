@@ -66,6 +66,7 @@ export default async function ProductPage({
                 name: product.name,
                 priceCents: product.priceCents,
                 imageUrl: product.imageUrl,
+                stock: product.stock,
               }}
               disabled={product.stock <= 0}
             />

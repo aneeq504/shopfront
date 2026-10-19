@@ -10,13 +10,16 @@ export function AddToCartButton({
   product: Omit<CartItem, "quantity">;
   disabled?: boolean;
 }) {
-  const { addItem } = useCart();
+  const { items, addItem } = useCart();
   const [added, setAdded] = useState(false);
+  const inCart =
+    items.find((i) => i.productId === product.productId)?.quantity ?? 0;
+  const atLimit = product.stock !== undefined && inCart >= product.stock;
 
   return (
     <button
       type="button"
-      disabled={disabled}
+      disabled={disabled || (atLimit && !added)}
       onClick={() => {
         addItem(product);
         setAdded(true);
@@ -26,7 +29,13 @@ export function AddToCartButton({
         added ? "bg-emerald-500 hover:bg-emerald-400" : ""
       }`}
     >
-      {disabled ? "Out of stock" : added ? "Added to cart" : "Add to cart"}
+      {disabled
+        ? "Out of stock"
+        : added
+          ? "Added to cart"
+          : atLimit
+            ? "All in stock added"
+            : "Add to cart"}
     </button>
   );
 }

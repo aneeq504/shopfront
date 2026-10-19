@@ -67,6 +67,7 @@ export function ProductCard({ product }: { product: ProductCardData }) {
               name: product.name,
               priceCents: product.priceCents,
               imageUrl: product.imageUrl,
+              stock: product.stock,
             }}
             disabled={outOfStock}
           />
