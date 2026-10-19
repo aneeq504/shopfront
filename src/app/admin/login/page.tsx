@@ -53,7 +53,7 @@ export default function AdminLoginPage() {
 
   if (sentTo) {
     return (
-      <form onSubmit={verifyCode} className="card mx-auto flex max-w-sm flex-col gap-4 p-6">
+      <form key="code" onSubmit={verifyCode} className="card mx-auto flex max-w-sm flex-col gap-4 p-6">
         <div>
           <h1 className="text-xl font-semibold">Enter the 6-digit code</h1>
           <p className="mt-1 text-sm text-slate-400">
@@ -102,7 +102,7 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <form onSubmit={requestCode} className="card mx-auto flex max-w-sm flex-col gap-4 p-6">
+    <form key="password" onSubmit={requestCode} className="card mx-auto flex max-w-sm flex-col gap-4 p-6">
       <h1 className="text-xl font-semibold">Owner login</h1>
       <input
         name="password"
