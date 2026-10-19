@@ -15,6 +15,7 @@ export type CartItem = {
   priceCents: number;
   imageUrl: string;
   quantity: number;
+  stock?: number;
 };
 
 type CartContextValue = {
@@ -28,6 +29,10 @@ type CartContextValue = {
 };
 
 const STORAGE_KEY = "shopfront.cart";
+
+function clampToStock(quantity: number, stock: number | undefined): number {
+  return stock === undefined ? quantity : Math.min(quantity, Math.max(0, stock));
+}
 
 const CartContext = createContext<CartContextValue | null>(null);
 
@@ -56,11 +61,16 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         if (existing) {
           return current.map((i) =>
             i.productId === item.productId
-              ? { ...i, quantity: i.quantity + quantity }
+              ? {
+                  ...i,
+                  ...item,
+                  quantity: clampToStock(i.quantity + quantity, item.stock),
+                }
               : i,
           );
         }
-        return [...current, { ...item, quantity }];
+        const clamped = clampToStock(quantity, item.stock);
+        return clamped > 0 ? [...current, { ...item, quantity: clamped }] : current;
       });
     },
     [],
@@ -70,7 +80,11 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     setItems((current) =>
       quantity <= 0
         ? current.filter((i) => i.productId !== productId)
-        : current.map((i) => (i.productId === productId ? { ...i, quantity } : i)),
+        : current.map((i) =>
+            i.productId === productId
+              ? { ...i, quantity: Math.max(1, clampToStock(quantity, i.stock)) }
+              : i,
+          ),
     );
   }, []);
 

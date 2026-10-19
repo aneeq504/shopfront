@@ -50,8 +50,34 @@ export async function POST(request: Request) {
       };
     });
 
-    const order = await prisma.$transaction(async (tx) => {
-      const created = await tx.order.create({
+    const reserved = await prisma.$transaction(
+      lineItems.map((item) =>
+        prisma.product.updateMany({
+          where: { id: item.productId, stock: { gte: item.quantity } },
+          data: { stock: { decrement: item.quantity } },
+        }),
+      ),
+    );
+    const reservedItems = lineItems.filter((_, i) => reserved[i].count > 0);
+    const releaseStock = () =>
+      prisma.$transaction(
+        reservedItems.map((item) =>
+          prisma.product.update({
+            where: { id: item.productId },
+            data: { stock: { increment: item.quantity } },
+          }),
+        ),
+      );
+
+    const shortItem = lineItems.find((_, i) => reserved[i].count === 0);
+    if (shortItem) {
+      await releaseStock();
+      throw new Error(`Not enough stock left of ${shortItem.productName}`);
+    }
+
+    let order;
+    try {
+      order = await prisma.order.create({
         data: {
           customerId: customer.id,
           customerName,
@@ -65,14 +91,10 @@ export async function POST(request: Request) {
           items: { create: lineItems },
         },
       });
-      for (const item of lineItems) {
-        await tx.product.update({
-          where: { id: item.productId },
-          data: { stock: { decrement: item.quantity } },
-        });
-      }
-      return created;
-    });
+    } catch (error) {
+      await releaseStock();
+      throw error;
+    }
     return NextResponse.json({ id: order.id }, { status: 201 });
   } catch (error) {
     return NextResponse.json(

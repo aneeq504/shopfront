@@ -33,18 +33,31 @@ export async function POST(
     );
   }
 
-  await prisma.$transaction(async (tx) => {
-    await tx.order.update({
-      where: { id: order.id },
-      data: { cancelledAt: new Date() },
-    });
-    for (const item of order.items) {
-      await tx.product.update({
-        where: { id: item.productId },
-        data: { stock: { increment: item.quantity } },
-      });
-    }
+  const { count: cancelled } = await prisma.order.updateMany({
+    where: { id: order.id, cancelledAt: null },
+    data: { cancelledAt: new Date() },
   });
+
+  if (!cancelled) {
+    return NextResponse.json({ error: "Order is already cancelled" }, { status: 409 });
+  }
+
+  try {
+    await prisma.$transaction(
+      order.items.map((item) =>
+        prisma.product.update({
+          where: { id: item.productId },
+          data: { stock: { increment: item.quantity } },
+        }),
+      ),
+    );
+  } catch (error) {
+    await prisma.order.update({
+      where: { id: order.id },
+      data: { cancelledAt: null },
+    });
+    throw error;
+  }
 
   return NextResponse.json({ ok: true });
 }
