@@ -39,7 +39,11 @@ const products = [
 
 for (const product of products) {
   const existing = await prisma.product.findFirst({ where: { name: product.name } });
-  if (!existing) await prisma.product.create({ data: product });
+  if (!existing) {
+    await prisma.product.create({
+      data: { ...product, images: { create: [{ url: product.imageUrl, position: 0 }] } },
+    });
+  }
 }
 
 console.log(`Seeded ${products.length} products.`);

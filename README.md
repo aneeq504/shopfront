@@ -32,16 +32,17 @@ Customer:
 - Dark themed UI; product cards lift on hover
 - Products with zero stock are shown as "Out of stock" and cannot be added to the cart
 - Product grid with search and category filters
-- Product detail pages
+- Product detail pages with a photo gallery (large photo, arrows, thumbnails)
 - Cart with quantity editing, persisted between visits
 - Checkout with delivery details; order confirmation page
-- 24-hour cancellation window: an order can be cancelled from its confirmation page for 24 hours (stock is returned), after which it is marked "Sent for delivery"
+- Order status: an order can be cancelled from its page for 24 hours (stock is returned); after that it is "Confirmed — awaiting dispatch" until the owner marks it "Shipped" and then "Delivered"
 
 Owner (admin only):
 - Password login at `/admin/login`
-- Create, edit, and delete products (name, description, price, stock, category, image URL)
+- Create, edit, and delete products (name, description, price, stock, category)
+- Upload up to 10 photos per product (JPG/PNG/GIF/WebP, 5 MB each), remove photos, and choose the cover photo. Files are stored in `uploads/` (or `UPLOAD_DIR`) and served from `/uploads/...`
 - Adjust the stock quantity of any product inline from the product list (+ / − or typed value)
-- View all placed orders with customer, item details, and current state (pending / cancelled / sent for delivery)
+- View all placed orders with customer, item details, and current state; mark orders shipped (once the 24-hour cancellation window has passed) and delivered, or cancel an unshipped order (stock is returned)
 
 ## Environment variables
 
@@ -55,6 +56,7 @@ Owner (admin only):
 | `SMTP_PORT` | SMTP port (default `587`; `465` switches to implicit TLS) |
 | `SMTP_USER` / `SMTP_PASSWORD` | SMTP credentials (for Gmail, an app password) |
 | `SMTP_FROM` | From address for outgoing mail (defaults to `SMTP_USER`) |
+| `UPLOAD_DIR` | Optional folder for uploaded product photos (default `./uploads`) |
 
 ## Scripts
 

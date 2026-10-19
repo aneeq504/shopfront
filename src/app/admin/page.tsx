@@ -1,10 +1,17 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { AdminProductRow } from "@/components/admin/AdminProductRow";
+import { AdminOrderActions } from "@/components/admin/AdminOrderActions";
 import { LogoutButton } from "@/components/admin/LogoutButton";
 import { isAdmin } from "@/lib/auth";
 import { formatPrice } from "@/lib/format";
-import { orderState, orderStateLabel } from "@/lib/orders";
+import {
+  cancellableUntil,
+  formatDateTime,
+  orderState,
+  orderStateClasses,
+  orderStateLabel,
+} from "@/lib/orders";
 import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
@@ -60,7 +67,9 @@ export default async function AdminPage() {
           {orders.length === 0 ? (
             <p className="p-6 text-sm text-slate-400">No orders yet.</p>
           ) : (
-            orders.map((order) => (
+            orders.map((order) => {
+              const state = orderState(order);
+              return (
               <div key={order.id} className="flex flex-col gap-1 p-4 text-sm">
                 <div className="flex justify-between">
                   <span className="font-medium">{order.customerName}</span>
@@ -68,9 +77,18 @@ export default async function AdminPage() {
                     {formatPrice(order.totalCents)}
                   </span>
                 </div>
-                <span className="w-fit rounded-full bg-slate-800 px-2 py-0.5 text-xs text-slate-300">
-                  {orderStateLabel(orderState(order))}
-                </span>
+                <div className="flex flex-wrap items-center gap-2 text-xs">
+                  <span
+                    className={`w-fit rounded-full bg-slate-800 px-2 py-0.5 ${orderStateClasses[state]}`}
+                  >
+                    {orderStateLabel(state)}
+                  </span>
+                  <span className="text-slate-500">
+                    Ordered {formatDateTime(order.createdAt)}
+                    {order.shippedAt && ` · shipped ${formatDateTime(order.shippedAt)}`}
+                    {order.deliveredAt && ` · delivered ${formatDateTime(order.deliveredAt)}`}
+                  </span>
+                </div>
                 <span className="text-slate-400">
                   {order.customerEmail} &middot; {order.customerPhone || "no phone"} &middot;{" "}
                   {order.address}
@@ -80,8 +98,14 @@ export default async function AdminPage() {
                     .map((item) => `${item.productName} x${item.quantity}`)
                     .join(", ")}
                 </span>
+                <AdminOrderActions
+                  orderId={order.id}
+                  state={state}
+                  shippableFrom={formatDateTime(cancellableUntil(order.createdAt))}
+                />
               </div>
-            ))
+              );
+            })
           )}
         </div>
       </section>

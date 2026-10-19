@@ -18,6 +18,17 @@ model Product {
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
   orderItems  OrderItem[]
+  images      ProductImage[]
+}
+
+model ProductImage {
+  id        String  @id @default(cuid())
+  productId String
+  url       String
+  position  Int     @default(0)
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId, position])
 }
 
 model Customer {
@@ -56,6 +67,8 @@ model Order {
   address       String
   totalCents    Int
   cancelledAt   DateTime?
+  shippedAt     DateTime?
+  deliveredAt   DateTime?
   createdAt     DateTime    @default(now())
   items         OrderItem[]
 }

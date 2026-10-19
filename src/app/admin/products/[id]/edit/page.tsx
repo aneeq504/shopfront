@@ -12,7 +12,10 @@ export default async function EditProductPage({
 }) {
   if (!isAdmin()) redirect("/admin/login");
 
-  const product = await prisma.product.findUnique({ where: { id: params.id } });
+  const product = await prisma.product.findUnique({
+    where: { id: params.id },
+    include: { images: { orderBy: { position: "asc" } } },
+  });
   if (!product) notFound();
 
   return (
@@ -24,7 +27,7 @@ export default async function EditProductPage({
           name: product.name,
           description: product.description,
           price: (product.priceCents / 100).toFixed(2),
-          imageUrl: product.imageUrl,
+          images: product.images.map((image) => image.url),
           stock: String(product.stock),
           category: product.category,
         }}

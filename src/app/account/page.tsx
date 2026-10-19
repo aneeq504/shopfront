@@ -4,16 +4,10 @@ import { ProfileForm } from "@/components/account/ProfileForm";
 import { SignOutButton } from "@/components/account/SignOutButton";
 import { currentCustomer } from "@/lib/customer-auth";
 import { formatPrice } from "@/lib/format";
-import { orderState, orderStateLabel } from "@/lib/orders";
+import { orderState, orderStateClasses, orderStateLabel } from "@/lib/orders";
 import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
-
-const stateClasses: Record<string, string> = {
-  CANCELLED: "text-red-400",
-  DISPATCHED: "text-slate-400",
-  PENDING: "text-amber-400",
-};
 
 export default async function AccountPage() {
   const customer = await currentCustomer();
@@ -66,7 +60,7 @@ export default async function AccountPage() {
                     >
                       {order.id.slice(-8)}
                     </Link>
-                    <span className={stateClasses[state]}>{orderStateLabel(state)}</span>
+                    <span className={orderStateClasses[state]}>{orderStateLabel(state)}</span>
                   </div>
                   <div className="flex justify-between gap-4 text-slate-400">
                     <span>

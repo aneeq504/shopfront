@@ -6,6 +6,7 @@ import { formatPrice } from "@/lib/format";
 import {
   CANCELLATION_WINDOW_HOURS,
   cancellableUntil,
+  formatDateTime,
   hoursLeftToCancel,
   orderState,
   orderStateLabel,
@@ -57,16 +58,27 @@ export default async function OrderPage({ params }: { params: { id: string } }) 
         <div className="flex flex-col gap-2 rounded-lg border border-amber-500/30 bg-amber-500/10 p-4">
           <p className="text-sm text-slate-200">
             You can cancel this order for the next {hoursLeftToCancel(order.createdAt)} hour(s) —
-            until {cancellableUntil(order.createdAt).toUTCString()}. After that it is sent for
-            delivery and can no longer be cancelled.
+            until {formatDateTime(cancellableUntil(order.createdAt))}. After that it is prepared
+            for dispatch and can no longer be cancelled.
           </p>
           <CancelOrderButton orderId={order.id} />
         </div>
       )}
-      {state === "DISPATCHED" && (
+      {state === "CONFIRMED" && (
         <p className="rounded-lg border border-slate-800 bg-slate-800/40 p-4 text-sm text-slate-300">
-          The {CANCELLATION_WINDOW_HOURS}-hour cancellation window has passed and this order has
-          been sent for delivery.
+          The {CANCELLATION_WINDOW_HOURS}-hour cancellation window has passed. Your order is
+          confirmed and will be shipped soon.
+        </p>
+      )}
+      {state === "SHIPPED" && order.shippedAt && (
+        <p className="rounded-lg border border-sky-500/30 bg-sky-500/10 p-4 text-sm text-slate-200">
+          Shipped on {formatDateTime(order.shippedAt)}. Please keep {formatPrice(order.totalCents)}{" "}
+          ready to pay in cash on delivery.
+        </p>
+      )}
+      {state === "DELIVERED" && order.deliveredAt && (
+        <p className="rounded-lg border border-emerald-500/30 bg-emerald-500/10 p-4 text-sm text-slate-200">
+          Delivered on {formatDateTime(order.deliveredAt)}. Thanks for shopping with us!
         </p>
       )}
 

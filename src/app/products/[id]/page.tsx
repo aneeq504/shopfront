@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { AddToCartButton } from "@/components/AddToCartButton";
+import { ProductGallery } from "@/components/ProductGallery";
 import { formatPrice } from "@/lib/format";
 import { prisma } from "@/lib/prisma";
 
@@ -11,7 +12,10 @@ export default async function ProductPage({
 }: {
   params: { id: string };
 }) {
-  const product = await prisma.product.findUnique({ where: { id: params.id } });
+  const product = await prisma.product.findUnique({
+    where: { id: params.id },
+    include: { images: { orderBy: { position: "asc" } } },
+  });
   if (!product) notFound();
 
   return (
@@ -20,27 +24,11 @@ export default async function ProductPage({
         &larr; Back to products
       </Link>
       <div className="card grid gap-8 p-6 md:grid-cols-2">
-        <div className="relative aspect-square w-full overflow-hidden rounded-lg bg-slate-800">
-          {product.imageUrl ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={product.imageUrl}
-              alt={product.name}
-              className={`h-full w-full object-cover ${
-                product.stock <= 0 ? "opacity-40 grayscale" : ""
-              }`}
-            />
-          ) : (
-            <div className="flex h-full items-center justify-center text-slate-500">
-              No image
-            </div>
-          )}
-          {product.stock <= 0 && (
-            <span className="absolute left-3 top-3 rounded-full bg-red-500/90 px-3 py-1 text-xs font-semibold text-white">
-              Out of stock
-            </span>
-          )}
-        </div>
+        <ProductGallery
+          images={product.images.map((image) => image.url)}
+          name={product.name}
+          outOfStock={product.stock <= 0}
+        />
         <div className="flex flex-col gap-4">
           <span className="text-xs uppercase tracking-wide text-slate-500">
             {product.category}

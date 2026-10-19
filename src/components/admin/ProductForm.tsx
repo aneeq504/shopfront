@@ -1,13 +1,15 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRef, useState } from "react";
+
+const MAX_IMAGES = 10;
 
 export type ProductFormValues = {
   name: string;
   description: string;
   price: string;
-  imageUrl: string;
+  images: string[];
   stock: string;
   category: string;
 };
@@ -20,8 +22,38 @@ export function ProductForm({
   productId?: string;
 }) {
   const router = useRouter();
+  const fileInput = useRef<HTMLInputElement>(null);
+  const [images, setImages] = useState(initialValues.images);
   const [error, setError] = useState("");
+  const [uploading, setUploading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+
+  async function onFilesChosen(event: React.ChangeEvent<HTMLInputElement>) {
+    const files = Array.from(event.target.files ?? []);
+    event.target.value = "";
+    if (files.length === 0) return;
+    if (images.length + files.length > MAX_IMAGES) {
+      setError(`A product can have at most ${MAX_IMAGES} photos`);
+      return;
+    }
+    setUploading(true);
+    setError("");
+    const body = new FormData();
+    files.forEach((file) => body.append("files", file));
+    const response = await fetch("/api/admin/uploads", { method: "POST", body });
+    const data = (await response.json()) as { urls?: string[]; error?: string };
+    setUploading(false);
+    if (data.urls?.length) setImages((current) => [...current, ...data.urls!]);
+    if (!response.ok) setError(data.error ?? "Could not upload photos");
+  }
+
+  function makeCover(url: string) {
+    setImages((current) => [url, ...current.filter((u) => u !== url)]);
+  }
+
+  function removeImage(url: string) {
+    setImages((current) => current.filter((u) => u !== url));
+  }
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -33,7 +65,7 @@ export function ProductForm({
       {
         method: productId ? "PUT" : "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(Object.fromEntries(formData)),
+        body: JSON.stringify({ ...Object.fromEntries(formData), images }),
       },
     );
     setSubmitting(false);
@@ -102,17 +134,80 @@ export function ProductForm({
           className="input mt-1 w-full"
         />
       </label>
-      <label className="text-sm font-medium">
-        Image URL
-        <input
-          name="imageUrl"
-          defaultValue={initialValues.imageUrl}
-          placeholder="https://..."
-          className="input mt-1 w-full"
-        />
-      </label>
+
+      <div className="flex flex-col gap-2">
+        <div className="flex items-center justify-between">
+          <span className="text-sm font-medium">
+            Photos ({images.length}/{MAX_IMAGES})
+          </span>
+          <button
+            type="button"
+            onClick={() => fileInput.current?.click()}
+            disabled={uploading || images.length >= MAX_IMAGES}
+            className="btn-ghost text-sm"
+          >
+            {uploading ? "Uploading..." : "Upload photos"}
+          </button>
+          <input
+            ref={fileInput}
+            type="file"
+            accept="image/jpeg,image/png,image/gif,image/webp"
+            multiple
+            hidden
+            onChange={onFilesChosen}
+            data-testid="photo-input"
+          />
+        </div>
+        <p className="text-xs text-slate-500">
+          JPG, PNG, GIF or WebP, up to 5 MB each. The first photo is the cover shown on
+          product cards.
+        </p>
+        {images.length > 0 ? (
+          <ul className="grid grid-cols-3 gap-3 sm:grid-cols-4">
+            {images.map((url, index) => (
+              <li
+                key={url}
+                className="group relative aspect-square overflow-hidden rounded-lg border border-slate-700 bg-slate-800"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={url} alt={`Photo ${index + 1}`} className="h-full w-full object-cover" />
+                {index === 0 && (
+                  <span className="absolute left-1 top-1 rounded bg-amber-500 px-1.5 py-0.5 text-[10px] font-semibold text-slate-950">
+                    Cover
+                  </span>
+                )}
+                <div className="absolute inset-x-0 bottom-0 flex justify-between gap-1 bg-slate-950/80 p-1 text-[11px]">
+                  {index > 0 ? (
+                    <button
+                      type="button"
+                      onClick={() => makeCover(url)}
+                      className="text-amber-400 hover:underline"
+                    >
+                      Make cover
+                    </button>
+                  ) : (
+                    <span />
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => removeImage(url)}
+                    className="text-red-400 hover:underline"
+                  >
+                    Remove
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="rounded-lg border border-dashed border-slate-700 p-4 text-center text-sm text-slate-500">
+            No photos yet
+          </p>
+        )}
+      </div>
+
       {error && <p className="text-sm text-red-400">{error}</p>}
-      <button type="submit" disabled={submitting} className="btn-primary">
+      <button type="submit" disabled={submitting || uploading} className="btn-primary">
         {submitting ? "Saving..." : "Save product"}
       </button>
     </form>

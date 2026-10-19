@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { isAdmin } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { parseProductInput } from "./validate";
+import { parseProductInput, productData } from "./validate";
 
 export async function POST(request: Request) {
   if (!isAdmin()) {
@@ -13,6 +13,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: parsed.error }, { status: 400 });
   }
 
-  const product = await prisma.product.create({ data: parsed.data });
+  const product = await prisma.product.create({ data: productData(parsed.data) });
   return NextResponse.json({ id: product.id }, { status: 201 });
 }

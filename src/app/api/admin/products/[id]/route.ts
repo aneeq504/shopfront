@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { isAdmin } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { parseProductInput } from "../validate";
+import { deleteUploads } from "@/lib/uploads";
+import { parseProductInput, productData } from "../validate";
 
 export async function PUT(
   request: Request,
@@ -16,7 +17,15 @@ export async function PUT(
     return NextResponse.json({ error: parsed.error }, { status: 400 });
   }
 
-  await prisma.product.update({ where: { id: params.id }, data: parsed.data });
+  const previous = await prisma.productImage.findMany({ where: { productId: params.id } });
+  const data = productData(parsed.data);
+  await prisma.product.update({
+    where: { id: params.id },
+    data: { ...data, images: { deleteMany: {}, ...data.images } },
+  });
+  await deleteUploads(
+    previous.map((image) => image.url).filter((url) => !parsed.data.images.includes(url)),
+  );
   return NextResponse.json({ ok: true });
 }
 
@@ -60,6 +69,8 @@ export async function DELETE(
     );
   }
 
+  const images = await prisma.productImage.findMany({ where: { productId: params.id } });
   await prisma.product.delete({ where: { id: params.id } });
+  await deleteUploads(images.map((image) => image.url));
   return NextResponse.json({ ok: true });
 }

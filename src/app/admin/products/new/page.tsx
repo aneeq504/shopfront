@@ -15,7 +15,7 @@ export default function NewProductPage() {
           name: "",
           description: "",
           price: "",
-          imageUrl: "",
+          images: [],
           stock: "0",
           category: "General",
         }}
