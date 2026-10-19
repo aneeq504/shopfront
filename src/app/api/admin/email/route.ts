@@ -25,7 +25,7 @@ export async function POST(request: Request) {
   if (email === current) {
     return NextResponse.json({ error: "That is already the owner email" }, { status: 400 });
   }
-  if (!body.password || !isAdminPassword(body.password)) {
+  if (!body.password || !(await isAdminPassword(body.password))) {
     return NextResponse.json({ error: "Incorrect admin password" }, { status: 401 });
   }
 

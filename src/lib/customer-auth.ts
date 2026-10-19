@@ -23,42 +23,49 @@ export function verifyPassword(password: string, stored: string): boolean {
   return timingSafeEqual(expected, given);
 }
 
-export function customerToken(customerId: string): string {
-  const signature = createHmac("sha256", secret()).update(customerId).digest("hex");
-  return `${customerId}.${signature}`;
+type SessionCustomer = { id: string; sessionVersion: number };
+
+function sign(value: string): string {
+  return createHmac("sha256", secret()).update(value).digest("hex");
 }
 
-export function customerIdFromToken(token: string | undefined): string | null {
+/** `<id>.<sessionVersion>.<signature>`; bumping sessionVersion signs out every device. */
+export function customerToken(customer: SessionCustomer): string {
+  const value = `${customer.id}.${customer.sessionVersion}`;
+  return `${value}.${sign(value)}`;
+}
+
+export function parseCustomerToken(token: string | undefined): SessionCustomer | null {
   if (!token) return null;
-  const [customerId, signature] = token.split(".");
-  if (!customerId || !signature) return null;
-  const expected = Buffer.from(
-    createHmac("sha256", secret()).update(customerId).digest("hex"),
-  );
+  const [id, version, signature] = token.split(".");
+  if (!id || !version || !signature) return null;
+  const expected = Buffer.from(sign(`${id}.${version}`));
   const given = Buffer.from(signature);
   if (expected.length !== given.length || !timingSafeEqual(expected, given)) {
     return null;
   }
-  return customerId;
-}
-
-export function currentCustomerId(): string | null {
-  return customerIdFromToken(cookies().get(CUSTOMER_COOKIE)?.value);
+  const sessionVersion = Number(version);
+  return Number.isInteger(sessionVersion) ? { id, sessionVersion } : null;
 }
 
 export async function currentCustomer() {
-  const id = currentCustomerId();
-  if (!id) return null;
-  return prisma.customer.findUnique({ where: { id } });
+  const session = parseCustomerToken(cookies().get(CUSTOMER_COOKIE)?.value);
+  if (!session) return null;
+  const customer = await prisma.customer.findUnique({ where: { id: session.id } });
+  return customer?.sessionVersion === session.sessionVersion ? customer : null;
+}
+
+export async function currentCustomerId(): Promise<string | null> {
+  return (await currentCustomer())?.id ?? null;
 }
 
 export function customerSessionResponse(
-  customerId: string,
+  customer: SessionCustomer,
   body: Record<string, unknown>,
   status = 200,
 ) {
   const response = NextResponse.json(body, { status });
-  response.cookies.set(CUSTOMER_COOKIE, customerToken(customerId), {
+  response.cookies.set(CUSTOMER_COOKIE, customerToken(customer), {
     httpOnly: true,
     sameSite: "lax",
     secure: process.env.NODE_ENV === "production",

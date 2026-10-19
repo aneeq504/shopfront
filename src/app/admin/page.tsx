@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { AdminProductRow } from "@/components/admin/AdminProductRow";
 import { AdminEmailForm } from "@/components/admin/AdminEmailForm";
+import { AdminPasswordForm } from "@/components/admin/AdminPasswordForm";
 import { AdminOrderActions } from "@/components/admin/AdminOrderActions";
 import { LogoutButton } from "@/components/admin/LogoutButton";
 import { adminEmail, isAdmin } from "@/lib/auth";
@@ -42,6 +43,7 @@ export default async function AdminPage() {
       </div>
 
       <AdminEmailForm currentEmail={ownerEmail ?? ""} />
+      <AdminPasswordForm />
 
       <section className="flex flex-col gap-3">
         <h2 className="text-lg font-medium">Products ({products.length})</h2>

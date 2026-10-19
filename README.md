@@ -26,6 +26,7 @@ Open http://localhost:3000. The admin panel is at http://localhost:3000/admin (l
 Customer:
 - Accounts: sign up and sign in at `/account/register` and `/account/login` (scrypt-hashed passwords, HMAC-signed cookie session)
 - Email OTP: sign-up is confirmed once with a 6-digit code emailed to the customer (10-minute expiry, 5 attempts, single use); sign-in afterwards is just email + password
+- Forgot password at `/account/forgot`: a 6-digit code emailed to the account lets the customer set a new password; this signs the account out on every other device
 - `/account` shows saved contact details, a profile editor, and the customer's own order history
 - Profile changes (name, email, password, phone, address) only take effect after confirming a 6-digit code emailed to the address being used; changing email or password also requires the current password
 - Checkout requires being signed in and is prefilled from the account
@@ -39,6 +40,7 @@ Customer:
 
 Owner (admin only):
 - Two-step login at `/admin/login`: the admin password, then a 6-digit code emailed to the owner email (10-minute expiry, 5 attempts, single use)
+- Change the admin password from `/admin` (current password + a code sent to the owner email), or reset it from "Forgot password?" on `/admin/login` (a code sent to the owner email). The new password is stored hashed in the database and replaces `ADMIN_PASSWORD`
 - Change the owner email from `/admin`: needs the admin password and a 6-digit code sent to the new address; the old address gets a notice. The saved address overrides `ADMIN_EMAIL`
 - Create, edit, and delete products (name, description, price, stock, category)
 - Upload up to 10 photos per product (JPG/PNG/GIF/WebP, 5 MB each), remove photos, and choose the cover photo. Files are stored in `uploads/` (or `UPLOAD_DIR`) and served from `/uploads/...`
@@ -50,7 +52,7 @@ Owner (admin only):
 | Name | Purpose |
 | --- | --- |
 | `DATABASE_URL` | SQLite connection string, e.g. `file:./dev.db` (resolved relative to `prisma/`) |
-| `ADMIN_PASSWORD` | Password for the owner login |
+| `ADMIN_PASSWORD` | Starting password for the owner login; ignored once the password is changed or reset from `/admin` |
 | `ADMIN_SESSION_SECRET` | Secret used to sign the admin session cookie |
 | `ADMIN_EMAIL` | Initial owner email for admin login codes (can be changed from `/admin`); admin login is refused when no owner email is set |
 | `CUSTOMER_SESSION_SECRET` | Secret used to sign customer session cookies and hash OTP codes |

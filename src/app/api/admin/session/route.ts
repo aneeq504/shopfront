@@ -1,11 +1,6 @@
 import { NextResponse } from "next/server";
-import { ADMIN_COOKIE, adminEmail, isAdminPassword, sessionToken } from "@/lib/auth";
+import { ADMIN_COOKIE, adminEmail, isAdminPassword, maskEmail, sessionToken } from "@/lib/auth";
 import { sendOtp, verifyOtp } from "@/lib/otp";
-
-function maskEmail(email: string): string {
-  const [name, domain] = email.split("@");
-  return `${name.slice(0, 2)}${"*".repeat(Math.max(1, name.length - 2))}@${domain}`;
-}
 
 /**
  * Step 1: { password } -> emails a code to ADMIN_EMAIL.
@@ -17,7 +12,7 @@ export async function POST(request: Request) {
     code?: string;
   };
 
-  if (!password || !isAdminPassword(password)) {
+  if (!password || !(await isAdminPassword(password))) {
     return NextResponse.json({ error: "Incorrect password" }, { status: 401 });
   }
 

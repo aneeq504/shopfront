@@ -21,7 +21,7 @@ export default async function OrderPage({ params }: { params: { id: string } }) 
     include: { items: true },
   });
   if (!order) notFound();
-  if (order.customerId && order.customerId !== currentCustomerId()) notFound();
+  if (order.customerId && order.customerId !== (await currentCustomerId())) notFound();
 
   const state = orderState(order);
 

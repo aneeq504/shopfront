@@ -5,13 +5,19 @@ import { prisma } from "./prisma";
 export const OTP_TTL_MINUTES = 10;
 export const OTP_MAX_ATTEMPTS = 5;
 
-export type OtpPurpose = "SIGNUP" | "PROFILE_UPDATE" | "ADMIN_LOGIN" | "ADMIN_EMAIL_CHANGE";
+export type OtpPurpose = "SIGNUP" | "PROFILE_UPDATE" | "ADMIN_LOGIN" | "ADMIN_EMAIL_CHANGE"
+  | "PASSWORD_RESET"
+  | "ADMIN_PASSWORD_CHANGE"
+  | "ADMIN_PASSWORD_RESET";
 
 const subjects: Record<OtpPurpose, string> = {
   SIGNUP: "Your ShopFront sign-up code",
   PROFILE_UPDATE: "Confirm your ShopFront account changes",
   ADMIN_LOGIN: "Your ShopFront admin login code",
   ADMIN_EMAIL_CHANGE: "Confirm your new ShopFront owner email",
+  PASSWORD_RESET: "Reset your ShopFront password",
+  ADMIN_PASSWORD_CHANGE: "Confirm your new ShopFront admin password",
+  ADMIN_PASSWORD_RESET: "Reset your ShopFront admin password",
 };
 
 const intros: Record<OtpPurpose, string> = {
@@ -19,6 +25,9 @@ const intros: Record<OtpPurpose, string> = {
   PROFILE_UPDATE: "Use this code to confirm the changes to your ShopFront account.",
   ADMIN_LOGIN: "Someone entered the correct admin password. Use this code to finish logging in to the ShopFront admin panel.",
   ADMIN_EMAIL_CHANGE: "Use this code to make this address the owner email for the ShopFront admin panel.",
+  PASSWORD_RESET: "Use this code to choose a new password for your ShopFront account. If you didn't ask for this, you can ignore this email.",
+  ADMIN_PASSWORD_CHANGE: "Use this code to confirm the new password for the ShopFront admin panel.",
+  ADMIN_PASSWORD_RESET: "Someone asked to reset the ShopFront admin password. Use this code to choose a new one. If this wasn't you, ignore this email.",
 };
 
 function hashCode(code: string): string {

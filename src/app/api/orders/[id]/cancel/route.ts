@@ -14,7 +14,7 @@ export async function POST(
     return NextResponse.json({ error: "Order not found" }, { status: 404 });
   }
 
-  if (order.customerId && order.customerId !== currentCustomerId()) {
+  if (order.customerId && order.customerId !== (await currentCustomerId())) {
     return NextResponse.json({ error: "Not your order" }, { status: 403 });
   }
 

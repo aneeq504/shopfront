@@ -38,7 +38,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Unknown verification purpose" }, { status: 400 });
   }
 
-  const sessionCustomerId = currentCustomerId();
+  const sessionCustomerId = await currentCustomerId();
   if (purpose === "PROFILE_UPDATE" && !sessionCustomerId) {
     return NextResponse.json({ error: "Not signed in" }, { status: 401 });
   }
@@ -58,7 +58,7 @@ export async function POST(request: Request) {
       );
     }
     const customer = await prisma.customer.create({ data: payload });
-    return customerSessionResponse(customer.id, { id: customer.id }, 201);
+    return customerSessionResponse(customer, { id: customer.id }, 201);
   }
 
   const customerId = sessionCustomerId;

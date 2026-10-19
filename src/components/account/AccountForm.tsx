@@ -96,6 +96,11 @@ export function AccountForm({ mode }: { mode: "login" | "register" }) {
           className="input mt-1 w-full"
         />
       </label>
+      {!registering && (
+        <Link href="/account/forgot" className="-mt-2 self-end text-sm text-amber-400 hover:underline">
+          Forgot password?
+        </Link>
+      )}
       {registering && (
         <>
           <label className="text-sm font-medium">

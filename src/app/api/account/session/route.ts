@@ -25,7 +25,7 @@ export async function POST(request: Request) {
     );
   }
 
-  return customerSessionResponse(customer.id, { ok: true });
+  return customerSessionResponse(customer, { ok: true });
 }
 
 export async function DELETE() {

@@ -37,9 +37,10 @@ model Customer {
   name         String
   phone        String   @default("")
   address      String   @default("")
-  passwordHash String
-  createdAt    DateTime @default(now())
-  orders       Order[]
+  passwordHash   String
+  sessionVersion Int      @default(0)
+  createdAt      DateTime @default(now())
+  orders         Order[]
 }
 
 model VerificationCode {

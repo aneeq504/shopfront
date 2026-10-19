@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -120,6 +121,9 @@ export default function AdminLoginPage() {
       <button type="submit" disabled={submitting} className="btn-primary">
         {submitting ? "Sending code..." : "Continue"}
       </button>
+      <Link href="/admin/forgot" className="text-sm text-amber-400 hover:underline">
+        Forgot password?
+      </Link>
     </form>
   );
 }
