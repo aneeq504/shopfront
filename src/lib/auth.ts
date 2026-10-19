@@ -11,6 +11,16 @@ export function adminPassword(): string {
   return process.env.ADMIN_PASSWORD ?? "admin123";
 }
 
+export function adminEmail(): string | null {
+  return process.env.ADMIN_EMAIL?.trim().toLowerCase() || null;
+}
+
+export function isAdminPassword(password: string): boolean {
+  const expected = createHmac("sha256", secret()).update(adminPassword()).digest();
+  const given = createHmac("sha256", secret()).update(password).digest();
+  return timingSafeEqual(expected, given);
+}
+
 export function sessionToken(): string {
   return createHmac("sha256", secret()).update("admin").digest("hex");
 }
