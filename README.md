@@ -25,7 +25,7 @@ Open http://localhost:3000. The admin panel is at http://localhost:3000/admin (l
 
 Customer:
 - Accounts: sign up and sign in at `/account/register` and `/account/login` (scrypt-hashed passwords, HMAC-signed cookie session)
-- Email OTP: every sign-up and sign-in is confirmed with a 6-digit code emailed to the customer (10-minute expiry, 5 attempts, single use)
+- Email OTP: sign-up is confirmed once with a 6-digit code emailed to the customer (10-minute expiry, 5 attempts, single use); sign-in afterwards is just email + password
 - `/account` shows saved contact details, a profile editor, and the customer's own order history
 - Profile changes (name, email, password, phone, address) only take effect after confirming a 6-digit code emailed to the address being used; changing email or password also requires the current password
 - Checkout requires being signed in and is prefilled from the account

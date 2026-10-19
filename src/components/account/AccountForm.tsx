@@ -17,7 +17,7 @@ export function AccountForm({ mode }: { mode: "login" | "register" }) {
   const registering = mode === "register";
   const endpoint = registering ? "/api/account" : "/api/account/session";
 
-  async function requestCode(payload: Record<string, FormDataEntryValue>) {
+  async function submit(payload: Record<string, FormDataEntryValue>) {
     const response = await fetch(endpoint, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -25,7 +25,12 @@ export function AccountForm({ mode }: { mode: "login" | "register" }) {
     });
     const data = await response.json();
     if (!response.ok) throw new Error(data.error ?? "Something went wrong");
-    return data.email as string;
+    return data as { otpRequired?: boolean; email?: string };
+  }
+
+  function finish() {
+    router.push(next);
+    router.refresh();
   }
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -34,8 +39,12 @@ export function AccountForm({ mode }: { mode: "login" | "register" }) {
     setError("");
     const payload = Object.fromEntries(new FormData(event.currentTarget).entries());
     try {
-      const email = await requestCode(payload);
-      setPending({ email, payload });
+      const result = await submit(payload);
+      if (result.otpRequired && result.email) {
+        setPending({ email: result.email, payload });
+      } else {
+        finish();
+      }
     } catch (requestError) {
       setError(
         requestError instanceof Error ? requestError.message : "Something went wrong",
@@ -50,20 +59,13 @@ export function AccountForm({ mode }: { mode: "login" | "register" }) {
       <div className="card mx-auto flex max-w-sm flex-col gap-4 p-6">
         <OtpForm
           email={pending.email}
-          purpose={registering ? "SIGNUP" : "LOGIN"}
-          description={
-            registering
-              ? "Confirm your email address to finish creating your account."
-              : "Confirm it is you before signing in."
-          }
+          purpose="SIGNUP"
+          description="Confirm your email address to finish creating your account."
           onResend={async () => {
-            await requestCode(pending.payload);
+            await submit(pending.payload);
           }}
           onCancel={() => setPending(null)}
-          onVerified={() => {
-            router.push(next);
-            router.refresh();
-          }}
+          onVerified={finish}
         />
       </div>
     );
@@ -108,11 +110,19 @@ export function AccountForm({ mode }: { mode: "login" | "register" }) {
       )}
       {error && <p className="text-sm text-red-400">{error}</p>}
       <button type="submit" disabled={submitting} className="btn-primary">
-        {submitting ? "Sending code..." : registering ? "Create account" : "Sign in"}
+        {submitting
+          ? registering
+            ? "Sending code..."
+            : "Signing in..."
+          : registering
+            ? "Create account"
+            : "Sign in"}
       </button>
-      <p className="text-sm text-slate-400">
-        We email you a 6-digit code to confirm it is you.
-      </p>
+      {registering && (
+        <p className="text-sm text-slate-400">
+          We email you a 6-digit code to confirm your email address.
+        </p>
+      )}
       <p className="text-sm text-slate-400">
         {registering ? "Already have an account? " : "New here? "}
         <Link

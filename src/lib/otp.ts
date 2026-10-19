@@ -5,17 +5,15 @@ import { prisma } from "./prisma";
 export const OTP_TTL_MINUTES = 10;
 export const OTP_MAX_ATTEMPTS = 5;
 
-export type OtpPurpose = "SIGNUP" | "LOGIN" | "PROFILE_UPDATE";
+export type OtpPurpose = "SIGNUP" | "PROFILE_UPDATE";
 
 const subjects: Record<OtpPurpose, string> = {
   SIGNUP: "Your ShopFront sign-up code",
-  LOGIN: "Your ShopFront sign-in code",
   PROFILE_UPDATE: "Confirm your ShopFront account changes",
 };
 
 const intros: Record<OtpPurpose, string> = {
   SIGNUP: "Use this code to finish creating your ShopFront account.",
-  LOGIN: "Use this code to sign in to ShopFront.",
   PROFILE_UPDATE: "Use this code to confirm the changes to your ShopFront account.",
 };
 

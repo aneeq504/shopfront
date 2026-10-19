@@ -1,5 +1,6 @@
 import { createHmac, randomBytes, scryptSync, timingSafeEqual } from "crypto";
 import { cookies } from "next/headers";
+import { NextResponse } from "next/server";
 import { prisma } from "./prisma";
 
 export const CUSTOMER_COOKIE = "customer_session";
@@ -49,4 +50,20 @@ export async function currentCustomer() {
   const id = currentCustomerId();
   if (!id) return null;
   return prisma.customer.findUnique({ where: { id } });
+}
+
+export function customerSessionResponse(
+  customerId: string,
+  body: Record<string, unknown>,
+  status = 200,
+) {
+  const response = NextResponse.json(body, { status });
+  response.cookies.set(CUSTOMER_COOKIE, customerToken(customerId), {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+    path: "/",
+    maxAge: 60 * 60 * 24 * 30,
+  });
+  return response;
 }

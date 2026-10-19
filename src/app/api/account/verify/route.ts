@@ -1,9 +1,5 @@
 import { NextResponse } from "next/server";
-import {
-  CUSTOMER_COOKIE,
-  currentCustomerId,
-  customerToken,
-} from "@/lib/customer-auth";
+import { currentCustomerId, customerSessionResponse } from "@/lib/customer-auth";
 import { verifyOtp, type OtpPurpose } from "@/lib/otp";
 import { prisma } from "@/lib/prisma";
 
@@ -29,18 +25,6 @@ type ProfilePayload = {
   passwordHash: string | null;
 };
 
-function sessionResponse(customerId: string, body: Record<string, unknown>, status = 200) {
-  const response = NextResponse.json(body, { status });
-  response.cookies.set(CUSTOMER_COOKIE, customerToken(customerId), {
-    httpOnly: true,
-    sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
-    path: "/",
-    maxAge: 60 * 60 * 24 * 30,
-  });
-  return response;
-}
-
 export async function POST(request: Request) {
   const { email, code, purpose } = (await request.json()) as VerifyRequest;
 
@@ -50,7 +34,7 @@ export async function POST(request: Request) {
       { status: 400 },
     );
   }
-  if (!["SIGNUP", "LOGIN", "PROFILE_UPDATE"].includes(purpose)) {
+  if (!["SIGNUP", "PROFILE_UPDATE"].includes(purpose)) {
     return NextResponse.json({ error: "Unknown verification purpose" }, { status: 400 });
   }
 
@@ -74,17 +58,7 @@ export async function POST(request: Request) {
       );
     }
     const customer = await prisma.customer.create({ data: payload });
-    return sessionResponse(customer.id, { id: customer.id }, 201);
-  }
-
-  if (purpose === "LOGIN") {
-    const customer = await prisma.customer.findUnique({
-      where: { email: email.trim().toLowerCase() },
-    });
-    if (!customer) {
-      return NextResponse.json({ error: "Account not found" }, { status: 404 });
-    }
-    return sessionResponse(customer.id, { ok: true });
+    return customerSessionResponse(customer.id, { id: customer.id }, 201);
   }
 
   const customerId = sessionCustomerId;

@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
-import { CUSTOMER_COOKIE, verifyPassword } from "@/lib/customer-auth";
-import { sendOtp } from "@/lib/otp";
+import {
+  CUSTOMER_COOKIE,
+  customerSessionResponse,
+  verifyPassword,
+} from "@/lib/customer-auth";
 import { prisma } from "@/lib/prisma";
 
 export async function POST(request: Request) {
@@ -22,11 +25,7 @@ export async function POST(request: Request) {
     );
   }
 
-  await sendOtp({ email: customer.email, purpose: "LOGIN", customerId: customer.id });
-  return NextResponse.json(
-    { otpRequired: true, email: customer.email },
-    { status: 202 },
-  );
+  return customerSessionResponse(customer.id, { ok: true });
 }
 
 export async function DELETE() {
