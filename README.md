@@ -38,7 +38,8 @@ Customer:
 - Order status: an order can be cancelled from its page for 24 hours (stock is returned); after that it is "Confirmed — awaiting dispatch" until the owner marks it "Shipped" and then "Delivered"
 
 Owner (admin only):
-- Two-step login at `/admin/login`: the admin password, then a 6-digit code emailed to `ADMIN_EMAIL` (10-minute expiry, 5 attempts, single use)
+- Two-step login at `/admin/login`: the admin password, then a 6-digit code emailed to the owner email (10-minute expiry, 5 attempts, single use)
+- Change the owner email from `/admin`: needs the admin password and a 6-digit code sent to the new address; the old address gets a notice. The saved address overrides `ADMIN_EMAIL`
 - Create, edit, and delete products (name, description, price, stock, category)
 - Upload up to 10 photos per product (JPG/PNG/GIF/WebP, 5 MB each), remove photos, and choose the cover photo. Files are stored in `uploads/` (or `UPLOAD_DIR`) and served from `/uploads/...`
 - Adjust the stock quantity of any product inline from the product list (+ / − or typed value)
@@ -51,7 +52,7 @@ Owner (admin only):
 | `DATABASE_URL` | SQLite connection string, e.g. `file:./dev.db` (resolved relative to `prisma/`) |
 | `ADMIN_PASSWORD` | Password for the owner login |
 | `ADMIN_SESSION_SECRET` | Secret used to sign the admin session cookie |
-| `ADMIN_EMAIL` | Owner email that receives the admin login code; admin login is refused when unset |
+| `ADMIN_EMAIL` | Initial owner email for admin login codes (can be changed from `/admin`); admin login is refused when no owner email is set |
 | `CUSTOMER_SESSION_SECRET` | Secret used to sign customer session cookies and hash OTP codes |
 | `SMTP_HOST` | SMTP server for OTP emails; when unset, codes are logged to the server console instead of sent |
 | `SMTP_PORT` | SMTP port (default `587`; `465` switches to implicit TLS) |

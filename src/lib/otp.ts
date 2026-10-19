@@ -5,18 +5,20 @@ import { prisma } from "./prisma";
 export const OTP_TTL_MINUTES = 10;
 export const OTP_MAX_ATTEMPTS = 5;
 
-export type OtpPurpose = "SIGNUP" | "PROFILE_UPDATE" | "ADMIN_LOGIN";
+export type OtpPurpose = "SIGNUP" | "PROFILE_UPDATE" | "ADMIN_LOGIN" | "ADMIN_EMAIL_CHANGE";
 
 const subjects: Record<OtpPurpose, string> = {
   SIGNUP: "Your ShopFront sign-up code",
   PROFILE_UPDATE: "Confirm your ShopFront account changes",
   ADMIN_LOGIN: "Your ShopFront admin login code",
+  ADMIN_EMAIL_CHANGE: "Confirm your new ShopFront owner email",
 };
 
 const intros: Record<OtpPurpose, string> = {
   SIGNUP: "Use this code to finish creating your ShopFront account.",
   PROFILE_UPDATE: "Use this code to confirm the changes to your ShopFront account.",
   ADMIN_LOGIN: "Someone entered the correct admin password. Use this code to finish logging in to the ShopFront admin panel.",
+  ADMIN_EMAIL_CHANGE: "Use this code to make this address the owner email for the ShopFront admin panel.",
 };
 
 function hashCode(code: string): string {

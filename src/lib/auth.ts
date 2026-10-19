@@ -1,5 +1,6 @@
 import { createHmac, timingSafeEqual } from "crypto";
 import { cookies } from "next/headers";
+import { prisma } from "./prisma";
 
 export const ADMIN_COOKIE = "admin_session";
 
@@ -11,8 +12,12 @@ export function adminPassword(): string {
   return process.env.ADMIN_PASSWORD ?? "admin123";
 }
 
-export function adminEmail(): string | null {
-  return process.env.ADMIN_EMAIL?.trim().toLowerCase() || null;
+export const ADMIN_EMAIL_SETTING = "adminEmail";
+
+/** The owner email set from the admin panel, falling back to ADMIN_EMAIL in .env. */
+export async function adminEmail(): Promise<string | null> {
+  const setting = await prisma.setting.findUnique({ where: { key: ADMIN_EMAIL_SETTING } });
+  return setting?.value || process.env.ADMIN_EMAIL?.trim().toLowerCase() || null;
 }
 
 export function isAdminPassword(password: string): boolean {

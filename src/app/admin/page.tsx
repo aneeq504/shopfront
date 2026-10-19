@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { AdminProductRow } from "@/components/admin/AdminProductRow";
+import { AdminEmailForm } from "@/components/admin/AdminEmailForm";
 import { AdminOrderActions } from "@/components/admin/AdminOrderActions";
 import { LogoutButton } from "@/components/admin/LogoutButton";
-import { isAdmin } from "@/lib/auth";
+import { adminEmail, isAdmin } from "@/lib/auth";
 import { formatPrice } from "@/lib/format";
 import {
   cancellableUntil,
@@ -19,9 +20,10 @@ export const dynamic = "force-dynamic";
 export default async function AdminPage() {
   if (!isAdmin()) redirect("/admin/login");
 
-  const [products, orders] = await Promise.all([
+  const [products, orders, ownerEmail] = await Promise.all([
     prisma.product.findMany({ orderBy: { createdAt: "desc" } }),
     prisma.order.findMany({ orderBy: { createdAt: "desc" }, include: { items: true } }),
+    adminEmail(),
   ]);
 
   return (
@@ -38,6 +40,8 @@ export default async function AdminPage() {
           <LogoutButton />
         </div>
       </div>
+
+      <AdminEmailForm currentEmail={ownerEmail ?? ""} />
 
       <section className="flex flex-col gap-3">
         <h2 className="text-lg font-medium">Products ({products.length})</h2>

@@ -21,7 +21,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Incorrect password" }, { status: 401 });
   }
 
-  const email = adminEmail();
+  const email = await adminEmail();
   if (!email) {
     return NextResponse.json(
       { error: "Admin login is disabled until ADMIN_EMAIL is set on the server" },
