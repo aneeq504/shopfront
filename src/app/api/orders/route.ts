@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { currentCustomer } from "@/lib/customer-auth";
+import { sendOrderPlacedEmails } from "@/lib/order-emails";
 import { prisma } from "@/lib/prisma";
 
 type OrderRequestItem = { productId: string; colorId?: string | null; quantity: number };
@@ -162,11 +163,15 @@ export async function POST(request: Request) {
           ),
           items: { create: lineItems },
         },
+        include: { items: true },
       });
     } catch (error) {
       await releaseStock();
       throw error;
     }
+    void sendOrderPlacedEmails(order).catch((error) =>
+      console.error("[order-email] dispatch failed", error),
+    );
     return NextResponse.json({ id: order.id }, { status: 201 });
   } catch (error) {
     return NextResponse.json(

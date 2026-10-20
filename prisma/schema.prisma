@@ -108,6 +108,7 @@ model Order {
   cancelledAt   DateTime?
   shippedAt     DateTime?
   deliveredAt   DateTime?
+  confirmationEmailSentAt DateTime?
   createdAt     DateTime    @default(now())
   items         OrderItem[]
   notifications Notification[]
