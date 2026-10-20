@@ -1,5 +1,12 @@
 import { NextResponse } from "next/server";
-import { ADMIN_COOKIE, adminEmail, isAdminPassword, maskEmail, sessionToken } from "@/lib/auth";
+import {
+  ADMIN_COOKIE,
+  adminEmail,
+  isAdmin,
+  isAdminPassword,
+  maskEmail,
+  setAdminSessionCookie,
+} from "@/lib/auth";
 import { sendOtp, verifyOtp } from "@/lib/otp";
 
 /**
@@ -34,15 +41,17 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: result.error }, { status: 400 });
   }
 
-  const response = NextResponse.json({ ok: true });
-  response.cookies.set(ADMIN_COOKIE, sessionToken(), {
-    httpOnly: true,
-    sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
-    path: "/",
-    maxAge: 60 * 60 * 12,
-  });
-  return response;
+  return setAdminSessionCookie(NextResponse.json({ ok: true }));
+}
+
+export async function PUT() {
+  if (!isAdmin()) {
+    const response = NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    response.cookies.delete(ADMIN_COOKIE);
+    return response;
+  }
+
+  return setAdminSessionCookie(NextResponse.json({ ok: true }));
 }
 
 export async function DELETE() {

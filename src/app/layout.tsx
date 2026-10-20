@@ -5,6 +5,7 @@ import { CartProvider } from "@/components/CartProvider";
 import { BackgroundDoodles } from "@/components/Doodles";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
+import { AdminIdleGuard } from "@/components/admin/AdminIdleGuard";
 import { isAdmin } from "@/lib/auth";
 import { currentCustomer } from "@/lib/customer-auth";
 import { unreadNotificationCount } from "@/lib/notifications";
@@ -39,6 +40,7 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={`${displayFont.variable} ${bodyFont.variable} isolate antialiased`}>
+        {admin && <AdminIdleGuard />}
         <BackgroundDoodles />
         <CartProvider>
           <Header

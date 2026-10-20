@@ -1,9 +1,13 @@
 import { createHmac, timingSafeEqual } from "crypto";
 import { cookies } from "next/headers";
+import type { NextResponse } from "next/server";
 import { hashPassword, verifyPassword } from "./customer-auth";
 import { prisma } from "./prisma";
 
 export const ADMIN_COOKIE = "admin_session";
+export const ADMIN_IDLE_TIMEOUT_MS = 15 * 60 * 1000;
+const ADMIN_SESSION_GRACE_MS = 60 * 1000;
+const ADMIN_FUTURE_SKEW_MS = 60 * 1000;
 
 function secret(): string {
   return process.env.ADMIN_SESSION_SECRET ?? "dev-insecure-secret";
@@ -54,15 +58,44 @@ export function maskEmail(email: string): string {
   return `${name.slice(0, 2)}${"*".repeat(Math.max(1, name.length - 2))}@${domain}`;
 }
 
-export function sessionToken(): string {
-  return createHmac("sha256", secret()).update("admin").digest("hex");
+export function sessionToken(issuedAt = Date.now()): string {
+  const timestamp = String(issuedAt);
+  const signature = createHmac("sha256", secret())
+    .update(`admin:${timestamp}`)
+    .digest("hex");
+  return `${timestamp}.${signature}`;
 }
 
 export function isValidToken(token: string | undefined): boolean {
   if (!token) return false;
-  const expected = Buffer.from(sessionToken());
-  const given = Buffer.from(token);
-  return expected.length === given.length && timingSafeEqual(expected, given);
+  const [timestamp, signature, extra] = token.split(".");
+  if (extra !== undefined || !timestamp || !/^\d+$/.test(timestamp)) return false;
+
+  const issuedAt = Number(timestamp);
+  if (!Number.isFinite(issuedAt) || !Number.isInteger(issuedAt)) return false;
+
+  const expected = Buffer.from(
+    createHmac("sha256", secret()).update(`admin:${timestamp}`).digest("hex"),
+  );
+  const given = Buffer.from(signature ?? "");
+  if (expected.length !== given.length || !timingSafeEqual(expected, given)) {
+    return false;
+  }
+
+  const age = Date.now() - issuedAt;
+  return age <= ADMIN_IDLE_TIMEOUT_MS + ADMIN_SESSION_GRACE_MS &&
+    issuedAt - Date.now() <= ADMIN_FUTURE_SKEW_MS;
+}
+
+export function setAdminSessionCookie(response: NextResponse): NextResponse {
+  response.cookies.set(ADMIN_COOKIE, sessionToken(), {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+    path: "/",
+    maxAge: ADMIN_IDLE_TIMEOUT_MS / 1000 + ADMIN_SESSION_GRACE_MS / 1000,
+  });
+  return response;
 }
 
 export function isAdmin(): boolean {
