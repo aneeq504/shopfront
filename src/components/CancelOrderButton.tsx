@@ -28,7 +28,7 @@ export function CancelOrderButton({ orderId }: { orderId: string }) {
         type="button"
         onClick={onCancel}
         disabled={submitting}
-        className="w-fit rounded-full border-2 border-ink bg-blush px-4 py-2 text-sm font-semibold text-berry shadow-pop-sm transition hover:bg-peach disabled:opacity-50"
+        className="btn-ghost w-fit bg-blush px-4 py-2 text-sm text-berry hover:bg-peach disabled:opacity-50"
       >
         {submitting ? "Cancelling..." : "Cancel order"}
       </button>

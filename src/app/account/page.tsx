@@ -20,7 +20,7 @@ export default async function AccountPage() {
   });
 
   return (
-    <div className="grid gap-8 md:grid-cols-[1fr_1.4fr]">
+    <div className="grid items-start gap-8 md:grid-cols-[1fr_1.4fr]">
       <div className="flex flex-col gap-4">
         <div className="card flex items-center justify-between gap-4 p-6">
           <div>
@@ -48,7 +48,7 @@ export default async function AccountPage() {
             .
           </p>
         ) : (
-          <ul className="divide-y divide-ink/10">
+          <ul className="divide-y divide-ink/15">
             {orders.map((order) => {
               const state = orderState(order);
               return (
@@ -67,7 +67,9 @@ export default async function AccountPage() {
                       {order.items.length} item(s) &middot;{" "}
                       {order.createdAt.toLocaleString("en-GB", { timeZone: "UTC" })}
                     </span>
-                    <span>{formatPrice(order.totalCents)}</span>
+                    <span className="font-display font-bold text-coralDark">
+                      {formatPrice(order.totalCents)}
+                    </span>
                   </div>
                 </li>
               );

@@ -68,7 +68,7 @@ export function AdminOrderActions({
             type="button"
             disabled={busy}
             onClick={() => run("cancel")}
-            className="rounded-full border-2 border-ink bg-blush px-3 py-1 text-xs font-semibold text-berry shadow-pop-sm transition hover:bg-peach disabled:opacity-50"
+            className="btn-ghost bg-blush px-3 py-1 text-xs text-berry hover:bg-peach disabled:opacity-50"
           >
             Cancel order
           </button>

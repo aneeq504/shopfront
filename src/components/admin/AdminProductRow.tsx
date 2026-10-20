@@ -80,7 +80,7 @@ export function AdminProductRow({
             type="button"
             onClick={() => saveStock(stock - 1)}
             disabled={saving || stock <= 0}
-            className="h-9 w-9 rounded-full border-2 border-ink bg-white font-bold text-ink shadow-pop-sm transition hover:bg-butter disabled:opacity-40"
+            className="btn-ghost h-9 w-9 px-0 py-0 text-ink disabled:opacity-40"
             aria-label={`Decrease stock for ${product.name}`}
           >
             &minus;
@@ -98,7 +98,7 @@ export function AdminProductRow({
             type="button"
             onClick={() => saveStock(stock + 1)}
             disabled={saving}
-            className="h-9 w-9 rounded-full border-2 border-ink bg-white font-bold text-ink shadow-pop-sm transition hover:bg-butter disabled:opacity-40"
+            className="btn-ghost h-9 w-9 px-0 py-0 text-ink disabled:opacity-40"
             aria-label={`Increase stock for ${product.name}`}
           >
             +
@@ -121,7 +121,7 @@ export function AdminProductRow({
       <button
         type="button"
         onClick={onDelete}
-        className="rounded-full border-2 border-ink bg-blush px-3 py-1.5 font-semibold text-berry shadow-pop-sm transition hover:bg-peach"
+        className="btn-ghost bg-blush px-3 py-1.5 text-berry hover:bg-peach"
       >
         Delete
       </button>

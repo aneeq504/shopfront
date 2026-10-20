@@ -3,89 +3,186 @@
 @tailwind utilities;
 
 :root {
-  --background: #fff8f0;
-  --foreground: #2b2140;
-  --font-display: "Arial Rounded MT Bold";
-  --font-body: "Aptos";
+  --background: #fbf4e4;
+  --foreground: #3b3226;
+  --font-display: "Gaegu";
+  --font-body: "Patrick Hand";
   color-scheme: light;
+}
+
+html {
+  font-size: 17px;
 }
 
 body {
   @apply bg-cream font-sans text-ink;
-  background-image: radial-gradient(#2b214014 1px, transparent 1px);
-  background-size: 22px 22px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='.08'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
   min-height: 100vh;
 }
 
 @layer components {
   .card {
-    @apply rounded-3xl border-2 border-ink bg-white shadow-pop;
+    background-color: #fffdf7;
+    border-color: #3b3226;
+    border-width: 3px;
+    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+  }
+
+  .card-flat {
+    border-radius: 28px 10px 24px 12px / 12px 24px 10px 28px;
   }
 
   .input {
-    @apply rounded-2xl border-2 border-ink bg-white px-4 py-2 text-ink placeholder:text-muted/70 outline-none transition focus:shadow-pop-sm focus:ring-4 focus:ring-lavender/60;
+    background-color: #fffdf7;
+    border-color: #3b3226;
+    border-width: 2.5px;
+    border-radius: 8px 22px 10px 18px / 18px 10px 22px 8px;
+    color: #3b3226;
+    outline: none;
+    padding: 0.5rem 1rem;
+    transition: all 150ms ease-in-out;
+  }
+
+  .input::placeholder {
+    color: rgb(122 110 93 / 70%);
+  }
+
+  .input:focus {
+    box-shadow: 0 0 0 4px rgb(247 201 72 / 50%);
   }
 
   .btn-primary {
-    @apply rounded-full border-2 border-ink bg-coral px-5 py-2 font-display font-semibold text-ink shadow-pop-sm transition;
+    background-color: #f7c948;
+    border: 3px solid #3b3226;
+    border-radius: 15px 225px 15px 255px / 255px 15px 225px 15px;
+    box-shadow: 3px 4px 0 0 #3b3226;
+    color: #3b3226;
+    font-family: var(--font-display);
+    font-weight: 700;
+    padding: 0.5rem 1.25rem;
+    transition: all 150ms ease-in-out;
   }
 
   .btn-primary:hover:not(:disabled) {
-    @apply -translate-x-px -translate-y-px shadow-pop;
+    transform: translate(-1px, -1px);
   }
 
   .btn-primary:active:not(:disabled) {
-    @apply translate-x-[2px] translate-y-[2px] shadow-none;
+    transform: translate(2px, 3px);
+    box-shadow: none;
   }
 
   .btn-primary:disabled {
-    @apply cursor-not-allowed border-ink/20 bg-[#E9E3EE] text-muted shadow-none;
+    background-color: #ede6d6;
+    box-shadow: none;
+    color: #7a6e5d;
+    cursor: not-allowed;
     transform: none;
   }
 
   .btn-ghost {
-    @apply rounded-full border-2 border-ink bg-white px-5 py-2 font-display font-semibold text-ink shadow-pop-sm transition;
+    background-color: #fffdf7;
+    border: 3px solid #3b3226;
+    border-radius: 15px 225px 15px 255px / 255px 15px 225px 15px;
+    box-shadow: 3px 4px 0 0 #3b3226;
+    color: #3b3226;
+    font-family: var(--font-display);
+    font-weight: 700;
+    padding: 0.5rem 1.25rem;
+    transition: all 150ms ease-in-out;
   }
 
   .btn-ghost:hover:not(:disabled) {
-    @apply -translate-x-px -translate-y-px bg-butter shadow-pop;
+    background-color: #fdf0c6;
+    transform: translate(-1px, -1px);
   }
 
   .btn-ghost:active:not(:disabled) {
-    @apply translate-x-[2px] translate-y-[2px] shadow-none;
+    transform: translate(2px, 3px);
+    box-shadow: none;
   }
 
   .chip {
-    @apply rounded-full border-2 border-ink px-3 py-1 text-sm font-semibold shadow-pop-sm transition;
+    background-color: #fffdf7;
+    border-color: #3b3226;
+    border-width: 2.5px;
+    border-radius: 20px 8px 20px 8px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    padding: 0.25rem 0.75rem;
+    transition: all 150ms ease-in-out;
   }
 
   .muted {
-    @apply text-muted;
+    color: #7a6e5d;
   }
 
   .sticker {
-    @apply inline-block rounded-full border-2 border-ink px-2.5 py-0.5 text-xs font-extrabold shadow-pop-sm -rotate-6;
+    background-color: #fffdf7;
+    border: 2px dashed #3b3226;
+    border-radius: 10px;
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.125rem 0.625rem;
+    transform: rotate(-2deg);
   }
 
   .product-card {
     transition:
       transform 450ms cubic-bezier(0.22, 1, 0.36, 1),
       opacity 450ms ease,
-      box-shadow 450ms ease,
-      border-color 450ms ease;
+      box-shadow 450ms ease;
     will-change: transform;
+    --tilt: 0deg;
+    padding: 12px;
+    box-shadow: none;
+  }
+
+  .product-grid > :nth-child(4n + 1) {
+    --tilt: -1.2deg;
+  }
+
+  .product-grid > :nth-child(4n + 2) {
+    --tilt: 1deg;
+  }
+
+  .product-grid > :nth-child(4n + 3) {
+    --tilt: -0.6deg;
+  }
+
+  .product-grid > :nth-child(4n) {
+    --tilt: 1.4deg;
+  }
+
+  .product-grid .product-card {
+    transform: rotate(var(--tilt));
+  }
+
+  .product-card::before {
+    position: absolute;
+    top: -12px;
+    left: 40%;
+    z-index: 2;
+    width: 70px;
+    height: 22px;
+    background: #f7c94899;
+    content: "";
+    pointer-events: none;
+    transform: rotate(-4deg);
   }
 
   .product-grid:hover .product-card {
-    transform: scale(0.96);
-    opacity: 0.7;
+    transform: rotate(var(--tilt)) scale(0.97);
+    opacity: 0.75;
   }
 
   .product-grid .product-card:hover {
     z-index: 10;
-    transform: scale(1.06) translateY(-8px) rotate(-1deg);
+    transform: rotate(0) scale(1.05) translateY(-6px);
     opacity: 1;
-    box-shadow: 8px 8px 0 0 #2b2140;
+    box-shadow: theme("boxShadow.pop-lg");
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -96,6 +193,7 @@ body {
       opacity: 1;
       transition: none;
     }
+
   }
 }
 
@@ -110,7 +208,7 @@ body {
 }
 
 .animate-float {
-  animation: float 7s ease-in-out infinite;
+  animation: float 8s ease-in-out infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -123,4 +221,47 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+.card {
+  border: 3px solid #3b3226;
+  border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+}
+
+.card.card-flat {
+  border-radius: 28px 10px 24px 12px / 12px 24px 10px 28px;
+}
+
+.input {
+  background-color: #fffdf7;
+  border: 2.5px solid #3b3226;
+  border-radius: 8px 22px 10px 18px / 18px 10px 22px 8px;
+}
+
+.btn-primary,
+.btn-ghost {
+  border: 3px solid #3b3226;
+  border-radius: 15px 225px 15px 255px / 255px 15px 225px 15px;
+  font-family: var(--font-display);
+  font-weight: 700;
+}
+
+.chip {
+  border: 2.5px solid #3b3226;
+  border-radius: 20px 8px 20px 8px;
+}
+
+.sticker {
+  border: 2px dashed #3b3226;
+  border-radius: 10px;
+  transform: rotate(-2deg);
+}
+
+.hero-highlight {
+  background: linear-gradient(transparent 62%, #f9a8a8 62%, #f9a8a8 88%, transparent 88%);
+}
+
+button {
+  font-family: var(--font-display);
+  font-weight: 700;
 }

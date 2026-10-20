@@ -30,7 +30,7 @@ export function ProductPurchase({
             className={`chip ${
               color.id === selectedColorId
                 ? "bg-butter shadow-pop-sm"
-                : "bg-white hover:bg-butter"
+                : "bg-card hover:bg-butter"
             } ${color.stock <= 0 ? "opacity-50 line-through" : ""}`}
           >
             {color.name}

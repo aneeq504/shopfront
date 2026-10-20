@@ -85,7 +85,7 @@ export function NotificationBell({ unreadNotifications }: { unreadNotifications:
         aria-label="Notifications"
         aria-expanded={isOpen}
         onClick={() => setIsOpen((open) => !open)}
-        className="relative rounded-full border-2 border-ink bg-white p-1.5 text-ink shadow-pop-sm transition hover:bg-butter"
+        className="btn-ghost relative p-1.5 text-ink"
       >
         <svg
           aria-hidden="true"
@@ -102,7 +102,7 @@ export function NotificationBell({ unreadNotifications }: { unreadNotifications:
           />
         </svg>
         {unreadCount > 0 && (
-          <span className="absolute -right-1 -top-1 min-w-4 rounded-full border border-ink bg-berry px-1 text-center text-[10px] font-bold leading-4 text-ink">
+          <span className="absolute -right-1 -top-1 min-w-4 rounded-full border border-ink bg-berry px-1 text-center text-[10px] font-bold leading-4 text-cream">
             {unreadCount > 9 ? "9+" : unreadCount}
           </span>
         )}

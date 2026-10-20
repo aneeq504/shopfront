@@ -87,7 +87,7 @@ export function PhotoPicker({
           {images.map((url, index) => (
             <li
               key={url}
-              className="group relative aspect-square overflow-hidden rounded-lg border border-ink/15 bg-lavender/30"
+              className="group relative aspect-square overflow-hidden rounded-[8px_22px_10px_18px] border-[2.5px] border-ink bg-card"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={url} alt={`Photo ${index + 1}`} className="h-full w-full object-cover" />
@@ -96,7 +96,7 @@ export function PhotoPicker({
                   Cover
                 </span>
               )}
-              <div className="absolute inset-x-0 bottom-0 flex justify-between gap-1 bg-white/90 p-1 text-[11px]">
+              <div className="absolute inset-x-0 bottom-0 flex justify-between gap-1 bg-card/90 p-1 text-[11px]">
                 {index > 0 ? (
                   <button
                     type="button"

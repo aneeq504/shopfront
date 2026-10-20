@@ -21,10 +21,10 @@ export default function CartPage() {
   return (
     <div className="flex flex-col gap-6">
       <h1 className="font-display text-3xl font-bold">Your cart</h1>
-      <div className="card divide-y divide-ink/10">
+      <div className="card card-flat divide-y divide-ink/15">
         {items.map((item) => (
           <div key={lineKey(item.productId, item.colorId)} className="flex flex-wrap items-center gap-4 p-4 sm:flex-nowrap">
-            <div className="h-20 w-20 shrink-0 overflow-hidden rounded-2xl border-2 border-ink/15 bg-lavender/30">
+            <div className="h-20 w-20 shrink-0 overflow-hidden rounded-[8px_22px_10px_18px] border-[2.5px] border-ink bg-card">
               {item.imageUrl ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
@@ -76,7 +76,7 @@ export default function CartPage() {
         </button>
         <div className="flex items-center gap-6">
           <p className="text-lg">
-            Total: <span className="font-bold text-coralDark">{formatPrice(totalCents)}</span>
+            Total: <span className="font-display font-bold text-coralDark">{formatPrice(totalCents)}</span>
           </p>
           <Link href="/checkout" className="btn-primary px-5">
             Checkout

@@ -62,7 +62,7 @@ export function CheckoutForm({
 
   return (
     <div className="grid gap-8 md:grid-cols-[2fr_1fr]">
-      <form onSubmit={onSubmit} className="card flex flex-col gap-4 p-6">
+      <form onSubmit={onSubmit} className="card card-flat flex flex-col gap-4 p-6">
         <h1 className="font-display text-3xl font-bold">Delivery details</h1>
         <p className="text-sm text-muted">
           Payment is cash on delivery for now — no online payment required. You can cancel the
@@ -121,7 +121,7 @@ export function CheckoutForm({
         </ul>
         <p className="mt-4 flex justify-between border-t border-ink/15 pt-4 font-bold">
           <span>Total</span>
-          <span className="text-coralDark">{formatPrice(totalCents)}</span>
+          <span className="font-display text-coralDark">{formatPrice(totalCents)}</span>
         </p>
       </aside>
     </div>

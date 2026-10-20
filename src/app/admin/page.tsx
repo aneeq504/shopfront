@@ -54,7 +54,7 @@ export default async function AdminPage() {
 
       <section className="flex flex-col gap-3">
         <h2 className="font-display text-2xl font-bold">Products ({products.length})</h2>
-        <div className="card divide-y divide-ink/10">
+        <div className="card card-flat divide-y divide-ink/15">
           {products.length === 0 ? (
             <p className="p-6 text-sm text-muted">No products yet.</p>
           ) : (
@@ -77,7 +77,7 @@ export default async function AdminPage() {
 
       <section className="flex flex-col gap-3">
         <h2 className="font-display text-2xl font-bold">Orders ({orders.length})</h2>
-        <div className="card divide-y divide-ink/10">
+        <div className="card card-flat divide-y divide-ink/15">
           {orders.length === 0 ? (
             <p className="p-6 text-sm text-muted">No orders yet.</p>
           ) : (
@@ -87,7 +87,7 @@ export default async function AdminPage() {
               <div key={order.id} className="flex flex-col gap-1 p-4 text-sm">
                 <div className="flex justify-between">
                   <span className="font-medium">{order.customerName}</span>
-                  <span className="font-semibold text-coralDark">
+                  <span className="font-display font-bold text-coralDark">
                     {formatPrice(order.totalCents)}
                   </span>
                 </div>

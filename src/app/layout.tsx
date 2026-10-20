@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Fredoka, Nunito } from "next/font/google";
+import { Gaegu, Patrick_Hand } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "@/components/CartProvider";
 import { BackgroundDoodles } from "@/components/Doodles";
@@ -9,15 +9,15 @@ import { isAdmin } from "@/lib/auth";
 import { currentCustomer } from "@/lib/customer-auth";
 import { unreadNotificationCount } from "@/lib/notifications";
 
-const displayFont = Fredoka({
+const displayFont = Gaegu({
   subsets: ["latin"],
-  weight: ["500", "600", "700"],
+  weight: ["400", "700"],
   variable: "--font-display",
   display: "swap",
 });
-const bodyFont = Nunito({
+const bodyFont = Patrick_Hand({
   subsets: ["latin"],
-  weight: ["400", "600", "700", "800"],
+  weight: "400",
   variable: "--font-body",
   display: "swap",
 });
@@ -46,7 +46,7 @@ export default async function RootLayout({
             customerName={customer?.name ?? null}
             unreadNotifications={unreadCount}
           />
-          <main className="mx-auto min-h-[calc(100vh-15rem)] max-w-6xl px-4 py-8">
+          <main className="mx-auto min-h-[calc(100vh-15rem)] max-w-[1232px] px-4 py-8">
             {children}
           </main>
           <Footer />

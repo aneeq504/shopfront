@@ -68,7 +68,7 @@ export function ProductForm({
   return (
     <form
       onSubmit={onSubmit}
-      className="card flex max-w-xl flex-col gap-4 p-6"
+      className="card card-flat flex max-w-xl flex-col gap-4 p-6"
     >
       <label className="text-sm font-semibold">
         Name
@@ -135,7 +135,7 @@ export function ProductForm({
         {colors.map((color, index) => (
           <div
             key={color.id ?? `new-${index}`}
-            className="flex flex-col gap-3 rounded-2xl border-2 border-ink/15 bg-lavender/20 p-4"
+            className="flex flex-col gap-3 rounded-[14px_28px_12px_24px] border-[2.5px] border-ink/20 bg-lavender/30 p-4"
           >
             <div className="grid grid-cols-1 items-end gap-3 sm:grid-cols-[1fr_6rem_auto]">
               <label className="text-sm font-semibold">

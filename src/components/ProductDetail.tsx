@@ -50,7 +50,7 @@ export function ProductDetail({
           {formatPrice(product.priceCents)}
         </p>
         <p
-          className={`w-fit rounded-full border-2 border-ink px-3 py-1 text-sm font-semibold ${
+          className={`sticker w-fit text-sm ${
             product.stock > 0
               ? "bg-mint text-leaf"
               : "bg-blush text-berry"

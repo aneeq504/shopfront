@@ -17,24 +17,24 @@ export function Header({
   const { totalQuantity } = useCart();
 
   return (
-    <header className="sticky top-0 z-20 border-b-2 border-ink bg-cream/85 backdrop-blur">
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
+    <header className="sticky top-0 z-20 border-b-[3px] border-ink bg-cream/90 backdrop-blur">
+      <div className="mx-auto flex max-w-[1232px] items-center justify-between gap-2 px-3 py-3 sm:gap-4 sm:px-4">
         <Link
           href="/"
-          className="flex shrink-0 items-center gap-2 font-display text-xl font-bold tracking-tight sm:text-2xl"
+          className="flex shrink-0 items-center gap-2 font-display text-2xl font-bold leading-none tracking-tight sm:text-[30px]"
         >
-          <Mascot className="h-9 w-9" />
+          <Mascot className="h-8 w-8 sm:h-9 sm:w-9" />
           <span>
             <span className="text-coralDark">Shop</span>
             <span className="text-ink">Front</span>
           </span>
         </Link>
-        <nav className="flex items-center gap-1 text-xs sm:gap-2 sm:text-sm">
-          <Link href="/" className="rounded-full px-2 py-1.5 font-semibold transition hover:bg-butter sm:px-3">
+        <nav className="flex items-center gap-1 text-sm sm:gap-5 sm:text-lg">
+          <Link href="/" className="font-display text-ink transition hover:text-coralDark">
             Products
           </Link>
           {isAdmin && (
-            <Link href="/admin" className="rounded-full px-2 py-1.5 font-semibold transition hover:bg-butter sm:px-3">
+            <Link href="/admin" className="font-display text-ink transition hover:text-coralDark">
               Admin
             </Link>
           )}
@@ -43,14 +43,14 @@ export function Header({
           )}
           <Link
             href={customerName ? "/account" : "/account/login"}
-            className="max-w-24 truncate rounded-full px-2 py-1.5 font-semibold transition hover:bg-butter sm:max-w-none sm:px-3"
+            className="max-w-24 truncate font-display text-ink transition hover:text-coralDark sm:max-w-none"
           >
             {customerName ? customerName.split(" ")[0] : "Sign in"}
           </Link>
           <Link
             href="/cart"
             aria-label={`Cart (${totalQuantity})`}
-            className="btn-primary flex items-center gap-1.5 px-2.5 py-1.5 text-xs sm:gap-2 sm:px-4 sm:text-sm"
+            className="btn-primary flex items-center gap-1 px-2 py-1.5 text-xs sm:gap-2 sm:px-4 sm:text-sm"
           >
             <svg
               aria-hidden="true"

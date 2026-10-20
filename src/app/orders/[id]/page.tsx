@@ -38,7 +38,7 @@ export default async function OrderPage({ params }: { params: { id: string } }) 
         Thanks {order.customerName}, your order <span className="font-mono">{order.id}</span> is{" "}
         {orderStateLabel(state).toLowerCase()}. We will contact you at {order.customerEmail}.
       </p>
-      <ul className="divide-y divide-ink/10 border-y border-ink/15">
+      <ul className="divide-y divide-ink/15 border-y border-ink/15">
         {order.items.map((item) => (
           <li key={item.id} className="flex justify-between py-2 text-sm">
             <span>
@@ -51,12 +51,12 @@ export default async function OrderPage({ params }: { params: { id: string } }) 
       </ul>
       <p className="flex justify-between font-bold">
         <span>Total</span>
-        <span className="text-coralDark">{formatPrice(order.totalCents)}</span>
+        <span className="font-display text-coralDark">{formatPrice(order.totalCents)}</span>
       </p>
       <p className="text-sm text-muted">Delivery address: {order.address}</p>
 
       {state === "PENDING" && (
-        <div className="flex flex-col gap-2 rounded-lg border border-coral/30 bg-butter p-4">
+        <div className="flex flex-col gap-2 rounded-[12px_30px_12px_24px] border-[2.5px] border-coral/30 bg-butter p-4">
           <p className="text-sm text-ink">
             You can cancel this order for the next {hoursLeftToCancel(order.createdAt)} hour(s) —
             until {formatDateTime(cancellableUntil(order.createdAt))}. After that it is prepared
@@ -66,19 +66,19 @@ export default async function OrderPage({ params }: { params: { id: string } }) 
         </div>
       )}
       {state === "CONFIRMED" && (
-        <p className="rounded-lg border border-ink/15 bg-lavender/30 p-4 text-sm text-ink">
+        <p className="rounded-[12px_30px_12px_24px] border-[2.5px] border-ink/15 bg-lavender/30 p-4 text-sm text-ink">
           The {CANCELLATION_WINDOW_HOURS}-hour cancellation window has passed. Your order is
           confirmed and will be shipped soon.
         </p>
       )}
       {state === "SHIPPED" && order.shippedAt && (
-        <p className="rounded-lg border border-ocean/30 bg-skyblue p-4 text-sm text-ink">
+        <p className="rounded-[12px_30px_12px_24px] border-[2.5px] border-ocean/30 bg-skyblue p-4 text-sm text-ink">
           Shipped on {formatDateTime(order.shippedAt)}. Please keep {formatPrice(order.totalCents)}{" "}
           ready to pay in cash on delivery.
         </p>
       )}
       {state === "DELIVERED" && order.deliveredAt && (
-        <p className="rounded-lg border border-leaf/30 bg-mint p-4 text-sm text-ink">
+        <p className="rounded-[12px_30px_12px_24px] border-[2.5px] border-leaf/30 bg-mint p-4 text-sm text-ink">
           Delivered on {formatDateTime(order.deliveredAt)}. Thanks for shopping with us!
         </p>
       )}

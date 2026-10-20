@@ -16,7 +16,7 @@ export function ProductGallery({
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="relative aspect-square w-full overflow-hidden rounded-3xl border-2 border-ink bg-lavender/30">
+      <div className="relative aspect-square w-full overflow-hidden rounded-[12px_40px_12px_30px] border-[2.5px] border-ink bg-skyblue">
         {current ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -30,7 +30,7 @@ export function ProductGallery({
           </div>
         )}
         {outOfStock && (
-          <span className="sticker absolute left-3 top-3 rotate-3 bg-blush">
+          <span className="sticker absolute left-3 top-3 bg-blush">
             Out of stock
           </span>
         )}
@@ -40,7 +40,7 @@ export function ProductGallery({
               type="button"
               aria-label="Previous photo"
               onClick={() => setActive((active - 1 + images.length) % images.length)}
-              className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full border-2 border-ink bg-white/90 px-3 py-1.5 text-lg text-ink shadow-pop-sm transition hover:bg-butter"
+              className="btn-ghost absolute left-2 top-1/2 -translate-y-1/2 px-3 py-1.5 text-lg"
             >
               &lsaquo;
             </button>
@@ -48,11 +48,11 @@ export function ProductGallery({
               type="button"
               aria-label="Next photo"
               onClick={() => setActive((active + 1) % images.length)}
-              className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full border-2 border-ink bg-white/90 px-3 py-1.5 text-lg text-ink shadow-pop-sm transition hover:bg-butter"
+              className="btn-ghost absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1.5 text-lg"
             >
               &rsaquo;
             </button>
-            <span className="sticker absolute bottom-2 right-2 rotate-0 bg-white">
+            <span className="sticker absolute bottom-2 right-2 bg-card">
               {active + 1} / {images.length}
             </span>
           </>
@@ -66,7 +66,7 @@ export function ProductGallery({
               type="button"
               aria-label={`Show photo ${index + 1}`}
               onClick={() => setActive(index)}
-              className={`h-16 w-16 shrink-0 overflow-hidden rounded-md border-2 transition ${
+              className={`h-16 w-16 shrink-0 overflow-hidden rounded-[8px_22px_10px_18px] border-[2.5px] transition ${
                 index === active
                   ? "border-coral shadow-pop-sm"
                   : "border-ink/15 opacity-70 hover:opacity-100"
