@@ -37,6 +37,7 @@ Customer:
 - Cart with quantity editing, persisted between visits
 - Checkout with delivery details; order confirmation page
 - Order status: an order can be cancelled from its page for 24 hours (stock is returned); after that it is "Confirmed — awaiting dispatch" until the owner marks it "Shipped" and then "Delivered"
+- Notification bell for orders shipped or cancelled by the shop (no alerts for delivery or customer cancellations)
 
 Owner (admin only):
 - Sales overview: sales, orders, items sold and delivered (cash collected) amounts for today (from midnight Pakistan time), the last 7, 30 and 90 days, orders older than 90 days, and all time; cancelled orders are excluded

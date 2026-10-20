@@ -1,4 +1,5 @@
 import { CANCELLATION_WINDOW_HOURS } from "./orders";
+import { notifyCustomer } from "./notifications";
 import { prisma } from "./prisma";
 
 function windowStart(): Date {
@@ -35,6 +36,13 @@ export async function cancelOrder(
     await prisma.order.update({ where: { id: orderId }, data: { cancelledAt: null } });
     throw error;
   }
+  if (!byCustomer) {
+    try {
+      await notifyCustomer(orderId, "CANCELLED");
+    } catch (error) {
+      console.error("Failed to create cancellation notification", error);
+    }
+  }
   return true;
 }
 
@@ -49,7 +57,13 @@ export async function shipOrder(orderId: string): Promise<boolean> {
     },
     data: { shippedAt: new Date() },
   });
-  return count > 0;
+  if (!count) return false;
+  try {
+    await notifyCustomer(orderId, "SHIPPED");
+  } catch (error) {
+    console.error("Failed to create shipment notification", error);
+  }
+  return true;
 }
 
 export async function deliverOrder(orderId: string): Promise<boolean> {

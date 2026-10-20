@@ -4,6 +4,7 @@ import "./globals.css";
 import { CartProvider } from "@/components/CartProvider";
 import { Header } from "@/components/Header";
 import { currentCustomer } from "@/lib/customer-auth";
+import { unreadNotificationCount } from "@/lib/notifications";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -27,6 +28,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const customer = await currentCustomer();
+  const unreadCount = customer ? await unreadNotificationCount(customer.id) : 0;
 
   return (
     <html lang="en" className="dark">
@@ -34,7 +36,10 @@ export default async function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} text-slate-200 antialiased`}
       >
         <CartProvider>
-          <Header customerName={customer?.name ?? null} />
+          <Header
+            customerName={customer?.name ?? null}
+            unreadNotifications={unreadCount}
+          />
           <main className="mx-auto max-w-6xl px-4 py-8">{children}</main>
         </CartProvider>
       </body>

@@ -2,8 +2,15 @@
 
 import Link from "next/link";
 import { useCart } from "./CartProvider";
+import { NotificationBell } from "./NotificationBell";
 
-export function Header({ customerName }: { customerName: string | null }) {
+export function Header({
+  customerName,
+  unreadNotifications,
+}: {
+  customerName: string | null;
+  unreadNotifications: number;
+}) {
   const { totalQuantity } = useCart();
 
   return (
@@ -20,6 +27,9 @@ export function Header({ customerName }: { customerName: string | null }) {
           <Link href="/admin" className="text-slate-300 transition hover:text-amber-400">
             Admin
           </Link>
+          {customerName && (
+            <NotificationBell unreadNotifications={unreadNotifications} />
+          )}
           <Link
             href={customerName ? "/account" : "/account/login"}
             className="text-slate-300 transition hover:text-amber-400"

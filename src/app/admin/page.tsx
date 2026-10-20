@@ -57,7 +57,7 @@ export default async function AdminPage() {
           ) : (
             products.map((product) => (
               <AdminProductRow
-                key={product.id}
+                key={`${product.id}:${product.stock}`}
                 product={{
                   id: product.id,
                   name: product.name,
