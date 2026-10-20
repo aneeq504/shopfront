@@ -9,6 +9,7 @@ export type ProductCardData = {
   imageUrl: string;
   stock: number;
   category: string;
+  colorCount: number;
 };
 
 export function ProductCard({ product }: { product: ProductCardData }) {
@@ -61,16 +62,31 @@ export function ProductCard({ product }: { product: ProductCardData }) {
           {outOfStock ? "Currently unavailable" : `${product.stock} in stock`}
         </p>
         <div className="mt-auto">
-          <AddToCartButton
-            product={{
-              productId: product.id,
-              name: product.name,
-              priceCents: product.priceCents,
-              imageUrl: product.imageUrl,
-              stock: product.stock,
-            }}
-            disabled={outOfStock}
-          />
+          {product.colorCount > 0 ? (
+            outOfStock ? (
+              <button type="button" disabled className="btn-primary w-full px-3 py-2 text-sm">
+                Out of stock
+              </button>
+            ) : (
+              <Link
+                href={`/products/${product.id}`}
+                className="btn-primary block w-full px-3 py-2 text-center text-sm"
+              >
+                Choose color
+              </Link>
+            )
+          ) : (
+            <AddToCartButton
+              product={{
+                productId: product.id,
+                name: product.name,
+                priceCents: product.priceCents,
+                imageUrl: product.imageUrl,
+                stock: product.stock,
+              }}
+              disabled={outOfStock}
+            />
+          )}
         </div>
       </div>
     </div>

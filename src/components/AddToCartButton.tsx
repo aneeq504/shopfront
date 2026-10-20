@@ -1,19 +1,21 @@
 "use client";
 
 import { useState } from "react";
-import { useCart, type CartItem } from "./CartProvider";
+import { lineKey, useCart, type CartItem } from "./CartProvider";
 
 export function AddToCartButton({
   product,
   disabled,
+  disabledText,
 }: {
   product: Omit<CartItem, "quantity">;
   disabled?: boolean;
+  disabledText?: string;
 }) {
   const { items, addItem } = useCart();
   const [added, setAdded] = useState(false);
-  const inCart =
-    items.find((i) => i.productId === product.productId)?.quantity ?? 0;
+  const key = lineKey(product.productId, product.colorId);
+  const inCart = items.find((i) => lineKey(i.productId, i.colorId) === key)?.quantity ?? 0;
   const atLimit = product.stock !== undefined && inCart >= product.stock;
 
   return (
@@ -30,7 +32,7 @@ export function AddToCartButton({
       }`}
     >
       {disabled
-        ? "Out of stock"
+        ? disabledText ?? "Out of stock"
         : added
           ? "Added to cart"
           : atLimit

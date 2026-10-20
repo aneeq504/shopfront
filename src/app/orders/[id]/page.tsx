@@ -42,7 +42,8 @@ export default async function OrderPage({ params }: { params: { id: string } }) 
         {order.items.map((item) => (
           <li key={item.id} className="flex justify-between py-2 text-sm">
             <span>
-              {item.productName} &times; {item.quantity}
+              {item.productName}
+              {item.colorName && ` (${item.colorName})`} &times; {item.quantity}
             </span>
             <span>{formatPrice(item.unitPriceCents * item.quantity)}</span>
           </li>

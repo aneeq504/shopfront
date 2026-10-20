@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { AddToCartButton } from "@/components/AddToCartButton";
 import { ProductGallery } from "@/components/ProductGallery";
+import { ProductPurchase } from "@/components/ProductPurchase";
 import { formatPrice } from "@/lib/format";
 import { prisma } from "@/lib/prisma";
 
@@ -14,7 +15,10 @@ export default async function ProductPage({
 }) {
   const product = await prisma.product.findUnique({
     where: { id: params.id },
-    include: { images: { orderBy: { position: "asc" } } },
+    include: {
+      images: { orderBy: { position: "asc" } },
+      colors: { orderBy: { position: "asc" } },
+    },
   });
   if (!product) notFound();
 
@@ -48,16 +52,29 @@ export default async function ProductPage({
           </p>
           <p className="whitespace-pre-line text-slate-300">{product.description}</p>
           <div className="max-w-xs">
-            <AddToCartButton
-              product={{
-                productId: product.id,
-                name: product.name,
-                priceCents: product.priceCents,
-                imageUrl: product.imageUrl,
-                stock: product.stock,
-              }}
-              disabled={product.stock <= 0}
-            />
+            {product.colors.length > 0 ? (
+              <ProductPurchase
+                product={{
+                  productId: product.id,
+                  name: product.name,
+                  priceCents: product.priceCents,
+                  imageUrl: product.imageUrl,
+                  stock: product.stock,
+                }}
+                colors={product.colors.map(({ id, name, stock }) => ({ id, name, stock }))}
+              />
+            ) : (
+              <AddToCartButton
+                product={{
+                  productId: product.id,
+                  name: product.name,
+                  priceCents: product.priceCents,
+                  imageUrl: product.imageUrl,
+                  stock: product.stock,
+                }}
+                disabled={product.stock <= 0}
+              />
+            )}
           </div>
         </div>
       </div>

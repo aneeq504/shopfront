@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { useCart } from "@/components/CartProvider";
+import { lineKey, useCart } from "@/components/CartProvider";
 import { formatPrice } from "@/lib/format";
 
 type Props = {
@@ -35,7 +35,11 @@ export function CheckoutForm({
         customerName: formData.get("customerName"),
         customerPhone: formData.get("customerPhone"),
         address: formData.get("address"),
-        items: items.map((i) => ({ productId: i.productId, quantity: i.quantity })),
+        items: items.map((i) => ({
+          productId: i.productId,
+          colorId: i.colorId,
+          quantity: i.quantity,
+        })),
       }),
     });
     const data = await response.json();
@@ -104,9 +108,12 @@ export function CheckoutForm({
         <h2 className="mb-4 text-lg font-semibold">Order summary</h2>
         <ul className="flex flex-col gap-2 text-sm">
           {items.map((item) => (
-            <li key={item.productId} className="flex justify-between gap-4">
+            <li key={lineKey(item.productId, item.colorId)} className="flex justify-between gap-4">
               <span>
                 {item.name} &times; {item.quantity}
+                {item.colorName && (
+                  <span className="block text-xs text-slate-500">Color: {item.colorName}</span>
+                )}
               </span>
               <span>{formatPrice(item.priceCents * item.quantity)}</span>
             </li>

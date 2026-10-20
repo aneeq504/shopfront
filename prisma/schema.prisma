@@ -19,6 +19,7 @@ model Product {
   updatedAt   DateTime    @updatedAt
   orderItems  OrderItem[]
   images      ProductImage[]
+  colors      ProductColor[]
 }
 
 model ProductImage {
@@ -28,6 +29,18 @@ model ProductImage {
   position  Int     @default(0)
   product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 
+  @@index([productId, position])
+}
+
+model ProductColor {
+  id        String  @id @default(cuid())
+  productId String
+  name      String
+  stock     Int     @default(0)
+  position  Int     @default(0)
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([productId, name])
   @@index([productId, position])
 }
 
@@ -94,6 +107,8 @@ model OrderItem {
   orderId        String
   productId      String
   productName    String
+  colorId        String?
+  colorName      String   @default("")
   unitPriceCents Int
   quantity       Int
   order          Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)

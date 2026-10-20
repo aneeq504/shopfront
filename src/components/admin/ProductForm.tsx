@@ -12,6 +12,7 @@ export type ProductFormValues = {
   images: string[];
   stock: string;
   category: string;
+  colors: { id?: string; name: string; stock: number }[];
 };
 
 export function ProductForm({
@@ -24,9 +25,19 @@ export function ProductForm({
   const router = useRouter();
   const fileInput = useRef<HTMLInputElement>(null);
   const [images, setImages] = useState(initialValues.images);
+  const [stock, setStock] = useState(initialValues.stock);
+  const [colors, setColors] = useState(
+    initialValues.colors.map((color) => ({ ...color, stock: String(color.stock) })),
+  );
   const [error, setError] = useState("");
   const [uploading, setUploading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const totalColorStock = colors.reduce(
+    (total, color) =>
+      total +
+      (Number.isFinite(Number(color.stock)) ? Math.floor(Number(color.stock)) : 0),
+    0,
+  );
 
   async function onFilesChosen(event: React.ChangeEvent<HTMLInputElement>) {
     const files = Array.from(event.target.files ?? []);
@@ -65,7 +76,12 @@ export function ProductForm({
       {
         method: productId ? "PUT" : "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...Object.fromEntries(formData), images }),
+        body: JSON.stringify({
+          ...Object.fromEntries(formData),
+          stock: colors.length ? totalColorStock : stock,
+          images,
+          colors: colors.map((color) => ({ ...color, stock: Number(color.stock) })),
+        }),
       },
     );
     setSubmitting(false);
@@ -121,11 +137,78 @@ export function ProductForm({
             type="number"
             min="0"
             required
-            defaultValue={initialValues.stock}
+            value={colors.length ? totalColorStock : stock}
+            onChange={(event) => setStock(event.target.value)}
+            disabled={colors.length > 0}
             className="input mt-1 w-full"
           />
+          {colors.length > 0 && (
+            <span className="mt-1 block text-xs text-slate-500">Total of all colors</span>
+          )}
         </label>
       </div>
+      <section className="flex flex-col gap-3">
+        <div className="flex items-center justify-between">
+          <h2 className="text-sm font-medium">Colors</h2>
+          <button
+            type="button"
+            onClick={() => setColors((current) => [...current, { name: "", stock: "0" }])}
+            disabled={colors.length >= 20}
+            className="btn-ghost text-sm"
+          >
+            Add color
+          </button>
+        </div>
+        {colors.map((color, index) => (
+          <div
+            key={color.id ?? `new-${index}`}
+            className="grid grid-cols-[1fr_6rem_auto] items-end gap-2"
+          >
+            <label className="text-sm">
+              Name
+              <input
+                value={color.name}
+                maxLength={30}
+                onChange={(event) =>
+                  setColors((current) =>
+                    current.map((item, itemIndex) =>
+                      itemIndex === index ? { ...item, name: event.target.value } : item,
+                    ),
+                  )
+                }
+                className="input mt-1 w-full"
+              />
+            </label>
+            <label className="text-sm">
+              Stock
+              <input
+                type="number"
+                min="0"
+                step="1"
+                value={color.stock}
+                onChange={(event) =>
+                  setColors((current) =>
+                    current.map((item, itemIndex) =>
+                      itemIndex === index ? { ...item, stock: event.target.value } : item,
+                    ),
+                  )
+                }
+                className="input mt-1 w-full"
+              />
+            </label>
+            <button
+              type="button"
+              onClick={() =>
+                setColors((current) => current.filter((_, itemIndex) => itemIndex !== index))
+              }
+              aria-label={`Remove ${color.name || "color"}`}
+              className="btn-ghost px-3 py-2 text-red-400"
+            >
+              Remove
+            </button>
+          </div>
+        ))}
+      </section>
       <label className="text-sm font-medium">
         Category
         <input

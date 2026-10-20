@@ -18,6 +18,7 @@ export default function NewProductPage() {
           images: [],
           stock: "0",
           category: "General",
+          colors: [],
         }}
       />
     </div>

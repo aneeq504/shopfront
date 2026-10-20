@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useCart } from "@/components/CartProvider";
+import { lineKey, useCart } from "@/components/CartProvider";
 import { formatPrice } from "@/lib/format";
 
 export default function CartPage() {
@@ -23,7 +23,7 @@ export default function CartPage() {
       <h1 className="text-2xl font-semibold">Your cart</h1>
       <div className="card divide-y divide-slate-800">
         {items.map((item) => (
-          <div key={item.productId} className="flex items-center gap-4 p-4">
+          <div key={lineKey(item.productId, item.colorId)} className="flex items-center gap-4 p-4">
             <div className="h-20 w-20 shrink-0 overflow-hidden rounded-lg bg-slate-800">
               {item.imageUrl ? (
                 // eslint-disable-next-line @next/next/no-img-element
@@ -41,6 +41,9 @@ export default function CartPage() {
               >
                 {item.name}
               </Link>
+              {item.colorName && (
+                <p className="text-sm text-slate-400">Color: {item.colorName}</p>
+              )}
               <p className="text-sm text-slate-400">{formatPrice(item.priceCents)}</p>
             </div>
             <input
@@ -48,16 +51,18 @@ export default function CartPage() {
               min={1}
               max={item.stock}
               value={item.quantity}
-              onChange={(e) => setQuantity(item.productId, Number(e.target.value))}
+              onChange={(e) =>
+                setQuantity(lineKey(item.productId, item.colorId), Number(e.target.value))
+              }
               className="input w-20 px-2 py-1 text-sm"
-              aria-label={`Quantity for ${item.name}`}
+              aria-label={`Quantity for ${item.name}${item.colorName ? ` (${item.colorName})` : ""}`}
             />
             <p className="w-32 text-right font-semibold">
               {formatPrice(item.priceCents * item.quantity)}
             </p>
             <button
               type="button"
-              onClick={() => removeItem(item.productId)}
+              onClick={() => removeItem(lineKey(item.productId, item.colorId))}
               className="text-sm text-red-400 hover:underline"
             >
               Remove

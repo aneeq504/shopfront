@@ -47,6 +47,7 @@ Owner (admin only):
 - Create, edit, and delete products (name, description, price, stock, category)
 - Upload up to 10 photos per product (JPG/PNG/GIF/WebP, 5 MB each), remove photos, and choose the cover photo. Files are stored in `uploads/` (or `UPLOAD_DIR`) and served from `/uploads/...`
 - Adjust the stock quantity of any product inline from the product list (+ / − or typed value)
+- Manage product color options with per-color stock; customers see “Sold out” for unavailable colors
 - View all placed orders with customer, item details, and current state; mark orders shipped (once the 24-hour cancellation window has passed) and delivered, or cancel an unshipped order (stock is returned)
 
 ## Environment variables

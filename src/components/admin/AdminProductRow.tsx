@@ -7,7 +7,14 @@ import { useState } from "react";
 export function AdminProductRow({
   product,
 }: {
-  product: { id: string; name: string; price: string; stock: number; category: string };
+  product: {
+    id: string;
+    name: string;
+    price: string;
+    stock: number;
+    category: string;
+    colors: { name: string; stock: number }[];
+  };
 }) {
   const router = useRouter();
   const [error, setError] = useState("");
@@ -57,45 +64,56 @@ export function AdminProductRow({
         {error && <p className="text-red-400">{error}</p>}
       </div>
 
-      <div className="flex items-center gap-2">
-        <span className="text-xs uppercase tracking-wide text-slate-500">Stock</span>
-        <button
-          type="button"
-          onClick={() => saveStock(stock - 1)}
-          disabled={saving || stock <= 0}
-          className="h-8 w-8 rounded-lg border border-slate-700 text-slate-200 transition hover:border-slate-500 hover:bg-slate-800 disabled:opacity-40"
-          aria-label={`Decrease stock for ${product.name}`}
-        >
-          &minus;
-        </button>
-        <input
-          type="number"
-          min={0}
-          value={stock}
-          onChange={(e) => setStock(Number(e.target.value))}
-          onBlur={(e) => saveStock(Number(e.target.value))}
-          className="input w-20 px-2 py-1 text-center text-sm"
-          aria-label={`Stock for ${product.name}`}
-        />
-        <button
-          type="button"
-          onClick={() => saveStock(stock + 1)}
-          disabled={saving}
-          className="h-8 w-8 rounded-lg border border-slate-700 text-slate-200 transition hover:border-slate-500 hover:bg-slate-800 disabled:opacity-40"
-          aria-label={`Increase stock for ${product.name}`}
-        >
-          +
-        </button>
-        <span
-          className={`rounded-full px-2 py-0.5 text-xs ${
-            stock > 0
-              ? "bg-emerald-500/10 text-emerald-400"
-              : "bg-red-500/10 text-red-400"
-          }`}
-        >
-          {stock > 0 ? "In stock" : "Out of stock"}
-        </span>
-      </div>
+      {product.colors.length > 0 ? (
+        <div className="flex flex-col gap-1">
+          <span className="text-sm text-slate-300">
+            Stock {product.stock} <span className="text-slate-500">(per color)</span>
+          </span>
+          <span className="text-xs text-slate-500">
+            {product.colors.map((color) => `${color.name} ${color.stock}`).join(" · ")}
+          </span>
+        </div>
+      ) : (
+        <div className="flex items-center gap-2">
+          <span className="text-xs uppercase tracking-wide text-slate-500">Stock</span>
+          <button
+            type="button"
+            onClick={() => saveStock(stock - 1)}
+            disabled={saving || stock <= 0}
+            className="h-8 w-8 rounded-lg border border-slate-700 text-slate-200 transition hover:border-slate-500 hover:bg-slate-800 disabled:opacity-40"
+            aria-label={`Decrease stock for ${product.name}`}
+          >
+            &minus;
+          </button>
+          <input
+            type="number"
+            min={0}
+            value={stock}
+            onChange={(e) => setStock(Number(e.target.value))}
+            onBlur={(e) => saveStock(Number(e.target.value))}
+            className="input w-20 px-2 py-1 text-center text-sm"
+            aria-label={`Stock for ${product.name}`}
+          />
+          <button
+            type="button"
+            onClick={() => saveStock(stock + 1)}
+            disabled={saving}
+            className="h-8 w-8 rounded-lg border border-slate-700 text-slate-200 transition hover:border-slate-500 hover:bg-slate-800 disabled:opacity-40"
+            aria-label={`Increase stock for ${product.name}`}
+          >
+            +
+          </button>
+          <span
+            className={`rounded-full px-2 py-0.5 text-xs ${
+              stock > 0
+                ? "bg-emerald-500/10 text-emerald-400"
+                : "bg-red-500/10 text-red-400"
+            }`}
+          >
+            {stock > 0 ? "In stock" : "Out of stock"}
+          </span>
+        </div>
+      )}
 
       <Link href={`/admin/products/${product.id}/edit`} className="btn-ghost px-3 py-1">
         Edit

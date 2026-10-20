@@ -25,12 +25,20 @@ export async function cancelOrder(
   const items = await prisma.orderItem.findMany({ where: { orderId } });
   try {
     await prisma.$transaction(
-      items.map((item) =>
+      items.flatMap((item) => [
         prisma.product.update({
           where: { id: item.productId },
           data: { stock: { increment: item.quantity } },
         }),
-      ),
+        ...(item.colorId
+          ? [
+              prisma.productColor.updateMany({
+                where: { id: item.colorId },
+                data: { stock: { increment: item.quantity } },
+              }),
+            ]
+          : []),
+      ]),
     );
   } catch (error) {
     await prisma.order.update({ where: { id: orderId }, data: { cancelledAt: null } });

@@ -24,7 +24,10 @@ export default async function AdminPage() {
   if (!isAdmin()) redirect("/admin/login");
 
   const [products, orders, ownerEmail] = await Promise.all([
-    prisma.product.findMany({ orderBy: { createdAt: "desc" } }),
+    prisma.product.findMany({
+      orderBy: { createdAt: "desc" },
+      include: { colors: { orderBy: { position: "asc" } } },
+    }),
     prisma.order.findMany({ orderBy: { createdAt: "desc" }, include: { items: true } }),
     adminEmail(),
   ]);
@@ -64,6 +67,7 @@ export default async function AdminPage() {
                   price: formatPrice(product.priceCents),
                   stock: product.stock,
                   category: product.category,
+                  colors: product.colors.map(({ name, stock }) => ({ name, stock })),
                 }}
               />
             ))
@@ -105,7 +109,9 @@ export default async function AdminPage() {
                 </span>
                 <span className="text-slate-400">
                   {order.items
-                    .map((item) => `${item.productName} x${item.quantity}`)
+                    .map((item) =>
+                      `${item.productName}${item.colorName ? ` (${item.colorName})` : ""} x${item.quantity}`,
+                    )
                     .join(", ")}
                 </span>
                 <AdminOrderActions
