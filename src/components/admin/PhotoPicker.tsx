@@ -81,28 +81,28 @@ export function PhotoPicker({
           onChange={onFilesChosen}
         />
       </div>
-      {hint && <p className="text-xs text-slate-500">{hint}</p>}
+      {hint && <p className="text-xs text-muted">{hint}</p>}
       {images.length > 0 ? (
         <ul className="grid grid-cols-3 gap-3 sm:grid-cols-4">
           {images.map((url, index) => (
             <li
               key={url}
-              className="group relative aspect-square overflow-hidden rounded-lg border border-slate-700 bg-slate-800"
+              className="group relative aspect-square overflow-hidden rounded-lg border border-ink/15 bg-lavender/30"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={url} alt={`Photo ${index + 1}`} className="h-full w-full object-cover" />
               {index === 0 && (
-                <span className="absolute left-1 top-1 rounded bg-amber-500 px-1.5 py-0.5 text-[10px] font-semibold text-slate-950">
+                <span className="absolute left-1 top-1 rounded bg-coral px-1.5 py-0.5 text-[10px] font-semibold text-ink">
                   Cover
                 </span>
               )}
-              <div className="absolute inset-x-0 bottom-0 flex justify-between gap-1 bg-slate-950/80 p-1 text-[11px]">
+              <div className="absolute inset-x-0 bottom-0 flex justify-between gap-1 bg-white/90 p-1 text-[11px]">
                 {index > 0 ? (
                   <button
                     type="button"
                     onClick={() => makeCover(url)}
                     disabled={uploading}
-                    className="text-amber-400 hover:underline disabled:opacity-50"
+                    className="text-coralDark hover:underline disabled:opacity-50"
                   >
                     Make cover
                   </button>
@@ -114,7 +114,7 @@ export function PhotoPicker({
                   onClick={() => removeImage(url)}
                   disabled={uploading}
                   aria-label={`Remove photo ${index + 1}`}
-                  className="text-red-400 hover:underline disabled:opacity-50"
+                  className="text-berry hover:underline disabled:opacity-50"
                 >
                   Remove
                 </button>
@@ -123,11 +123,11 @@ export function PhotoPicker({
           ))}
         </ul>
       ) : (
-        <p className="rounded-lg border border-dashed border-slate-700 p-4 text-center text-sm text-slate-500">
+        <p className="rounded-lg border border-dashed border-ink/15 p-4 text-center text-sm text-muted">
           No photos yet
         </p>
       )}
-      {error && <p className="text-xs text-red-400">{error}</p>}
+      {error && <p className="text-xs text-berry">{error}</p>}
     </div>
   );
 }

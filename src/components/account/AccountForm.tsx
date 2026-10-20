@@ -73,7 +73,7 @@ export function AccountForm({ mode }: { mode: "login" | "register" }) {
 
   return (
     <form onSubmit={onSubmit} className="card mx-auto flex max-w-sm flex-col gap-4 p-6">
-      <h1 className="text-xl font-semibold">
+        <h1 className="font-display text-2xl font-bold">
         {registering ? "Create your account" : "Sign in"}
       </h1>
       {registering && (
@@ -97,7 +97,7 @@ export function AccountForm({ mode }: { mode: "login" | "register" }) {
         />
       </label>
       {!registering && (
-        <Link href="/account/forgot" className="-mt-2 self-end text-sm text-amber-400 hover:underline">
+        <Link href="/account/forgot" className="-mt-2 self-end text-sm text-coralDark hover:underline">
           Forgot password?
         </Link>
       )}
@@ -113,7 +113,7 @@ export function AccountForm({ mode }: { mode: "login" | "register" }) {
           </label>
         </>
       )}
-      {error && <p className="text-sm text-red-400">{error}</p>}
+      {error && <p className="text-sm text-berry">{error}</p>}
       <button type="submit" disabled={submitting} className="btn-primary">
         {submitting
           ? registering
@@ -124,15 +124,15 @@ export function AccountForm({ mode }: { mode: "login" | "register" }) {
             : "Sign in"}
       </button>
       {registering && (
-        <p className="text-sm text-slate-400">
+        <p className="text-sm text-muted">
           We email you a 6-digit code to confirm your email address.
         </p>
       )}
-      <p className="text-sm text-slate-400">
+      <p className="text-sm text-muted">
         {registering ? "Already have an account? " : "New here? "}
         <Link
           href={`${registering ? "/account/login" : "/account/register"}?next=${encodeURIComponent(next)}`}
-          className="text-amber-400 hover:underline"
+          className="text-coralDark hover:underline"
         >
           {registering ? "Sign in" : "Create an account"}
         </Link>

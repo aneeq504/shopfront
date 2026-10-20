@@ -42,23 +42,23 @@ export function ProductDetail({
         outOfStock={galleryOutOfStock}
       />
       <div className="flex flex-col gap-4">
-        <span className="text-xs uppercase tracking-wide text-slate-500">
+        <span className="text-xs font-bold uppercase tracking-wide text-muted">
           {product.category}
         </span>
-        <h1 className="text-2xl font-semibold text-slate-100">{product.name}</h1>
-        <p className="text-3xl font-bold text-amber-400">
+        <h1 className="font-display text-3xl font-bold text-ink">{product.name}</h1>
+        <p className="font-display text-3xl font-bold text-coralDark">
           {formatPrice(product.priceCents)}
         </p>
         <p
-          className={`w-fit rounded-full px-3 py-1 text-sm ${
+          className={`w-fit rounded-full border-2 border-ink px-3 py-1 text-sm font-semibold ${
             product.stock > 0
-              ? "bg-emerald-500/10 text-emerald-400"
-              : "bg-red-500/10 text-red-400"
+              ? "bg-mint text-leaf"
+              : "bg-blush text-berry"
           }`}
         >
           {product.stock > 0 ? `${product.stock} in stock` : "Out of stock"}
         </p>
-        <p className="whitespace-pre-line text-slate-300">{product.description}</p>
+        <p className="whitespace-pre-line text-ink/80">{product.description}</p>
         <div className="max-w-xs">
           {colors.length > 0 ? (
             <ProductPurchase

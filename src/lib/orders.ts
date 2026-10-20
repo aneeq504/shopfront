@@ -38,11 +38,11 @@ export function orderStateLabel(state: OrderState): string {
 }
 
 export const orderStateClasses: Record<OrderState, string> = {
-  CANCELLED: "text-red-400",
-  DELIVERED: "text-emerald-400",
-  SHIPPED: "text-sky-400",
-  CONFIRMED: "text-slate-300",
-  PENDING: "text-amber-400",
+  CANCELLED: "text-berry",
+  DELIVERED: "text-leaf",
+  SHIPPED: "text-ocean",
+  CONFIRMED: "text-ink",
+  PENDING: "text-coralDark",
 };
 
 export function hoursLeftToCancel(createdAt: Date): number {

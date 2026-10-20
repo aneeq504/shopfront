@@ -1,21 +1,25 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
+import { Fredoka, Nunito } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "@/components/CartProvider";
+import { BackgroundDoodles } from "@/components/Doodles";
+import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { isAdmin } from "@/lib/auth";
 import { currentCustomer } from "@/lib/customer-auth";
 import { unreadNotificationCount } from "@/lib/notifications";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
+const displayFont = Fredoka({
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
+  variable: "--font-display",
+  display: "swap",
 });
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
+const bodyFont = Nunito({
+  subsets: ["latin"],
+  weight: ["400", "600", "700", "800"],
+  variable: "--font-body",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -33,17 +37,19 @@ export default async function RootLayout({
   const unreadCount = customer ? await unreadNotificationCount(customer.id) : 0;
 
   return (
-    <html lang="en" className="dark">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} text-slate-200 antialiased`}
-      >
+    <html lang="en">
+      <body className={`${displayFont.variable} ${bodyFont.variable} isolate antialiased`}>
+        <BackgroundDoodles />
         <CartProvider>
           <Header
             isAdmin={admin}
             customerName={customer?.name ?? null}
             unreadNotifications={unreadCount}
           />
-          <main className="mx-auto max-w-6xl px-4 py-8">{children}</main>
+          <main className="mx-auto min-h-[calc(100vh-15rem)] max-w-6xl px-4 py-8">
+            {children}
+          </main>
+          <Footer />
         </CartProvider>
       </body>
     </html>

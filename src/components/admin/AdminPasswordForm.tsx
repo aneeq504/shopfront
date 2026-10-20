@@ -41,8 +41,8 @@ export function AdminPasswordForm() {
     <section className="card flex flex-col gap-3 p-4 text-sm">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <p className="font-medium">Admin password</p>
-          <p className="text-slate-400">Changing it needs a code sent to the owner email.</p>
+          <p className="font-display text-lg font-semibold">Admin password</p>
+          <p className="text-muted">Changing it needs a code sent to the owner email.</p>
         </div>
         {!editing && (
           <button type="button" onClick={() => setEditing(true)} className="btn-ghost text-sm">
@@ -51,7 +51,7 @@ export function AdminPasswordForm() {
         )}
       </div>
 
-      {notice && <p className="text-emerald-400">{notice}</p>}
+      {notice && <p className="text-leaf">{notice}</p>}
 
       {editing && !sentTo && (
         <form
@@ -110,8 +110,8 @@ export function AdminPasswordForm() {
             }
           }}
         >
-          <p className="text-slate-400">
-            We emailed a 6-digit code to <span className="text-slate-200">{sentTo}</span>. Enter
+          <p className="text-muted">
+            We emailed a 6-digit code to <span className="text-ink">{sentTo}</span>. Enter
             it to confirm the new password. It expires in 10 minutes.
           </p>
           <div className="flex flex-col gap-2 sm:flex-row">
@@ -145,7 +145,7 @@ export function AdminPasswordForm() {
         </form>
       )}
 
-      {error && <p className="text-red-400">{error}</p>}
+      {error && <p className="text-berry">{error}</p>}
     </section>
   );
 }

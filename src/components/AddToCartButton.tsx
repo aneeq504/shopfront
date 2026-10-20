@@ -28,7 +28,7 @@ export function AddToCartButton({
         setTimeout(() => setAdded(false), 1500);
       }}
       className={`btn-primary w-full px-3 py-2 text-sm ${
-        added ? "bg-emerald-500 hover:bg-emerald-400" : ""
+        added ? "bg-mint hover:bg-mint" : ""
       }`}
     >
       {disabled

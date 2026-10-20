@@ -26,7 +26,7 @@ export default async function EditProductPage({
 
   return (
     <div className="flex flex-col gap-6">
-      <h1 className="text-2xl font-semibold">Edit product</h1>
+      <h1 className="font-display text-3xl font-bold">Edit product</h1>
       <ProductForm
         productId={product.id}
         initialValues={{

@@ -85,7 +85,7 @@ export function NotificationBell({ unreadNotifications }: { unreadNotifications:
         aria-label="Notifications"
         aria-expanded={isOpen}
         onClick={() => setIsOpen((open) => !open)}
-        className="relative rounded-lg p-1.5 text-slate-300 transition hover:text-amber-400"
+        className="relative rounded-full border-2 border-ink bg-white p-1.5 text-ink shadow-pop-sm transition hover:bg-butter"
       >
         <svg
           aria-hidden="true"
@@ -102,7 +102,7 @@ export function NotificationBell({ unreadNotifications }: { unreadNotifications:
           />
         </svg>
         {unreadCount > 0 && (
-          <span className="absolute -right-1 -top-1 min-w-4 rounded-full bg-red-500 px-1 text-center text-[10px] font-bold leading-4 text-white">
+          <span className="absolute -right-1 -top-1 min-w-4 rounded-full border border-ink bg-berry px-1 text-center text-[10px] font-bold leading-4 text-ink">
             {unreadCount > 9 ? "9+" : unreadCount}
           </span>
         )}
@@ -110,28 +110,28 @@ export function NotificationBell({ unreadNotifications }: { unreadNotifications:
 
       {isOpen && (
         <div className="card absolute right-0 top-full z-30 mt-3 w-80 max-w-[calc(100vw-2rem)] overflow-hidden">
-          <h2 className="border-b border-slate-800 px-4 py-3 text-sm font-semibold text-slate-100">
+          <h2 className="border-b-2 border-ink/15 bg-lavender/30 px-4 py-3 font-display text-sm font-bold text-ink">
             Notifications
           </h2>
           <div className="max-h-96 overflow-y-auto">
             {isLoading ? (
-              <p className="p-4 text-sm text-slate-400">Loading…</p>
+              <p className="p-4 text-sm text-muted">Loading…</p>
             ) : notifications.length === 0 ? (
-              <p className="p-4 text-sm text-slate-400">No notifications yet</p>
+              <p className="p-4 text-sm text-muted">No notifications yet</p>
             ) : (
               notifications.map((notification) => (
                 <Link
                   key={notification.id}
                   href={`/orders/${notification.orderId}`}
                   onClick={() => setIsOpen(false)}
-                  className={`block border-b border-slate-800 px-4 py-3 transition hover:bg-slate-800/70 ${
-                    notification.read ? "" : "bg-slate-800/40"
+                  className={`block border-b border-ink/10 px-4 py-3 transition hover:bg-butter/60 ${
+                    notification.read ? "" : "bg-butter/40"
                   }`}
                 >
-                  <p className="text-sm text-slate-200">{notification.text}</p>
+                  <p className="text-sm text-ink">{notification.text}</p>
                   <time
                     dateTime={notification.createdAt}
-                    className="mt-1 block text-xs text-slate-500"
+                    className="mt-1 block text-xs text-muted"
                   >
                     {formatDateTime(new Date(notification.createdAt))}
                   </time>

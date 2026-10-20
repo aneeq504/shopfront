@@ -70,7 +70,7 @@ export function ProductForm({
       onSubmit={onSubmit}
       className="card flex max-w-xl flex-col gap-4 p-6"
     >
-      <label className="text-sm font-medium">
+      <label className="text-sm font-semibold">
         Name
         <input
           name="name"
@@ -79,7 +79,7 @@ export function ProductForm({
           className="input mt-1 w-full"
         />
       </label>
-      <label className="text-sm font-medium text-slate-200">
+      <label className="text-sm font-semibold text-ink">
         Description
         <textarea
           name="description"
@@ -89,7 +89,7 @@ export function ProductForm({
         />
       </label>
       <div className="grid grid-cols-2 gap-4">
-        <label className="text-sm font-medium">
+        <label className="text-sm font-semibold">
           Price (Rs.)
           <input
             name="price"
@@ -101,7 +101,7 @@ export function ProductForm({
             className="input mt-1 w-full"
           />
         </label>
-        <label className="text-sm font-medium">
+        <label className="text-sm font-semibold">
           Stock
           <input
             name="stock"
@@ -114,13 +114,13 @@ export function ProductForm({
             className="input mt-1 w-full"
           />
           {colors.length > 0 && (
-            <span className="mt-1 block text-xs text-slate-500">Total of all colors</span>
+            <span className="mt-1 block text-xs text-muted">Total of all colors</span>
           )}
         </label>
       </div>
       <section className="flex flex-col gap-3">
         <div className="flex items-center justify-between">
-          <h2 className="text-sm font-medium">Colors</h2>
+          <h2 className="font-display text-lg font-semibold">Colors</h2>
           <button
             type="button"
             onClick={() =>
@@ -135,10 +135,10 @@ export function ProductForm({
         {colors.map((color, index) => (
           <div
             key={color.id ?? `new-${index}`}
-            className="flex flex-col gap-3 rounded-lg border border-slate-800 p-3"
+            className="flex flex-col gap-3 rounded-2xl border-2 border-ink/15 bg-lavender/20 p-4"
           >
-            <div className="grid grid-cols-[1fr_6rem_auto] items-end gap-2">
-              <label className="text-sm">
+            <div className="grid grid-cols-1 items-end gap-3 sm:grid-cols-[1fr_6rem_auto]">
+              <label className="text-sm font-semibold">
                 Name
                 <input
                   value={color.name}
@@ -153,7 +153,7 @@ export function ProductForm({
                   className="input mt-1 w-full"
                 />
               </label>
-              <label className="text-sm">
+              <label className="text-sm font-semibold">
                 Stock
                 <input
                   type="number"
@@ -177,7 +177,7 @@ export function ProductForm({
                 }
                 disabled={activeUploads > 0}
                 aria-label={`Remove ${color.name || "color"}`}
-                className="btn-ghost px-3 py-2 text-red-400 disabled:opacity-50"
+                className="btn-ghost px-3 py-2 text-berry disabled:opacity-50"
               >
                 Remove
               </button>
@@ -199,7 +199,7 @@ export function ProductForm({
           </div>
         ))}
       </section>
-      <label className="text-sm font-medium">
+      <label className="text-sm font-semibold">
         Category
         <input
           name="category"
@@ -218,7 +218,7 @@ export function ProductForm({
         hint="JPG, PNG, GIF or WebP, up to 5 MB each. The first photo is the cover shown on product cards."
       />
 
-      {error && <p className="text-sm text-red-400">{error}</p>}
+      {error && <p className="text-sm text-berry">{error}</p>}
       <button type="submit" disabled={submitting || activeUploads > 0} className="btn-primary">
         {submitting ? "Saving..." : "Save product"}
       </button>

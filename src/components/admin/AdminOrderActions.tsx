@@ -68,18 +68,18 @@ export function AdminOrderActions({
             type="button"
             disabled={busy}
             onClick={() => run("cancel")}
-            className="rounded-lg border border-red-500/40 px-3 py-1 text-xs text-red-400 transition hover:bg-red-500/10 disabled:opacity-50"
+            className="rounded-full border-2 border-ink bg-blush px-3 py-1 text-xs font-semibold text-berry shadow-pop-sm transition hover:bg-peach disabled:opacity-50"
           >
             Cancel order
           </button>
         )}
         {state === "PENDING" && (
-          <span className="text-xs text-slate-500">
+          <span className="text-xs text-muted">
             Customer can cancel until {shippableFrom}; shipping unlocks then.
           </span>
         )}
       </div>
-      {error && <p className="text-xs text-red-400">{error}</p>}
+      {error && <p className="text-xs text-berry">{error}</p>}
     </div>
   );
 }

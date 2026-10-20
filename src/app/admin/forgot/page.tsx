@@ -31,8 +31,8 @@ export default function AdminForgotPasswordPage() {
   if (done) {
     return (
       <div className="card mx-auto flex max-w-sm flex-col gap-4 p-6">
-        <h1 className="text-xl font-semibold">Password changed</h1>
-        <p className="text-sm text-slate-400">Log in with your new admin password.</p>
+        <h1 className="font-display text-2xl font-bold">Password changed</h1>
+        <p className="text-sm text-muted">Log in with your new admin password.</p>
         <Link href="/admin/login" className="btn-primary text-center">
           Go to login
         </Link>
@@ -51,15 +51,15 @@ export default function AdminForgotPasswordPage() {
           if (data?.email) setSentTo(data.email);
         }}
       >
-        <h1 className="text-xl font-semibold">Reset admin password</h1>
-        <p className="text-sm text-slate-400">
+        <h1 className="font-display text-2xl font-bold">Reset admin password</h1>
+        <p className="text-sm text-muted">
           We&apos;ll email a 6-digit code to the owner email so you can choose a new password.
         </p>
-        {error && <p className="text-sm text-red-400">{error}</p>}
+        {error && <p className="text-sm text-berry">{error}</p>}
         <button type="submit" disabled={submitting} className="btn-primary">
           {submitting ? "Sending code..." : "Send code"}
         </button>
-        <Link href="/admin/login" className="text-sm text-amber-400 hover:underline">
+        <Link href="/admin/login" className="text-sm text-coralDark hover:underline">
           Back to login
         </Link>
       </form>
@@ -80,9 +80,9 @@ export default function AdminForgotPasswordPage() {
         if (data) setDone(true);
       }}
     >
-      <h1 className="text-xl font-semibold">Choose a new admin password</h1>
-      <p className="text-sm text-slate-400">
-        We emailed a code to <span className="text-slate-200">{sentTo}</span>. It expires in 10
+      <h1 className="font-display text-2xl font-bold">Choose a new admin password</h1>
+      <p className="text-sm text-muted">
+        We emailed a code to <span className="text-ink">{sentTo}</span>. It expires in 10
         minutes.
       </p>
       <input
@@ -105,8 +105,8 @@ export default function AdminForgotPasswordPage() {
           className="input mt-1 w-full"
         />
       </label>
-      {notice && <p className="text-sm text-emerald-400">{notice}</p>}
-      {error && <p className="text-sm text-red-400">{error}</p>}
+      {notice && <p className="text-sm text-leaf">{notice}</p>}
+      {error && <p className="text-sm text-berry">{error}</p>}
       <button type="submit" disabled={submitting} className="btn-primary">
         {submitting ? "Saving..." : "Reset password"}
       </button>
@@ -117,11 +117,11 @@ export default function AdminForgotPasswordPage() {
           onClick={async () => {
             if (await post({})) setNotice("A new code is on its way.");
           }}
-          className="text-amber-400 hover:underline"
+          className="text-coralDark hover:underline"
         >
           Resend code
         </button>
-        <Link href="/admin/login" className="text-slate-400 hover:underline">
+        <Link href="/admin/login" className="text-muted hover:underline">
           Cancel
         </Link>
       </div>

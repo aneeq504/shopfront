@@ -12,13 +12,25 @@ export type ProductCardData = {
   colorCount: number;
 };
 
+const imageTints = [
+  "bg-peach",
+  "bg-mint",
+  "bg-lavender",
+  "bg-skyblue",
+  "bg-butter",
+  "bg-blush",
+];
+
 export function ProductCard({ product }: { product: ProductCardData }) {
   const outOfStock = product.stock <= 0;
+  const tintIndex = product.id
+    .split("")
+    .reduce((sum, character) => sum + character.charCodeAt(0), 0) % imageTints.length;
 
   return (
     <div className="card product-card group relative flex flex-col overflow-hidden">
       <Link href={`/products/${product.id}`} className="block">
-        <div className="relative aspect-square w-full overflow-hidden bg-slate-800">
+        <div className={`relative aspect-square w-full overflow-hidden ${imageTints[tintIndex]}`}>
           {product.imageUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
@@ -29,39 +41,39 @@ export function ProductCard({ product }: { product: ProductCardData }) {
               }`}
             />
           ) : (
-            <div className="flex h-full items-center justify-center text-sm text-slate-500">
-              No image
+            <div className="flex h-full items-center justify-center text-sm font-semibold text-muted">
+              No photo yet
             </div>
           )}
           {outOfStock && (
-            <span className="absolute left-2 top-2 rounded-full bg-red-500/90 px-2.5 py-1 text-xs font-semibold text-white">
-              Out of stock
+            <span className="sticker absolute left-3 top-3 rotate-3 bg-blush">
+              Sold out
             </span>
           )}
           {!outOfStock && product.stock <= 5 && (
-            <span className="absolute left-2 top-2 rounded-full bg-amber-500/90 px-2.5 py-1 text-xs font-semibold text-slate-950">
-              Only {product.stock} left
+            <span className="sticker absolute left-3 top-3 rotate-3 bg-butter">
+              Only {product.stock} left!
             </span>
           )}
         </div>
       </Link>
-      <div className="flex flex-1 flex-col gap-2 p-3">
-        <span className="text-xs uppercase tracking-wide text-slate-500">
+      <div className="flex flex-1 flex-col gap-2 p-4">
+        <span className="text-xs font-bold uppercase tracking-wide text-muted">
           {product.category}
         </span>
         <Link
           href={`/products/${product.id}`}
-          className="line-clamp-2 text-sm font-medium text-slate-100 transition hover:text-amber-400"
+          className="line-clamp-2 font-semibold text-ink transition hover:text-coralDark"
         >
           {product.name}
         </Link>
-        <p className="text-lg font-bold text-amber-400">
+        <p className="font-display text-xl font-bold text-coralDark">
           {formatPrice(product.priceCents)}
         </p>
-        <p className="text-xs text-slate-500">
+        <p className="text-xs font-semibold text-muted">
           {outOfStock ? "Currently unavailable" : `${product.stock} in stock`}
         </p>
-        <div className="mt-auto">
+        <div className="mt-auto pt-1">
           {product.colorCount > 0 ? (
             outOfStock ? (
               <button type="button" disabled className="btn-primary w-full px-3 py-2 text-sm">

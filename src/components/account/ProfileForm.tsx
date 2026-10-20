@@ -75,8 +75,8 @@ export function ProfileForm({ name, email, phone, address }: Props) {
       onSubmit={onSubmit}
       className="card flex flex-col gap-3 p-6"
     >
-      <h2 className="text-lg font-semibold">Profile</h2>
-      <p className="text-sm text-slate-400">
+      <h2 className="font-display text-xl font-bold">Profile</h2>
+      <p className="text-sm text-muted">
         Every change is confirmed with a 6-digit code emailed to you.
       </p>
       <label className="text-sm font-medium">
@@ -125,8 +125,8 @@ export function ProfileForm({ name, email, phone, address }: Props) {
           className="input mt-1 w-full"
         />
       </label>
-      {error && <p className="text-sm text-red-400">{error}</p>}
-      {status && <p className="text-sm text-emerald-400">{status}</p>}
+      {error && <p className="text-sm text-berry">{error}</p>}
+      {status && <p className="text-sm text-leaf">{status}</p>}
       <button type="submit" disabled={saving} className="btn-primary">
         {saving ? "Sending code..." : "Save changes"}
       </button>

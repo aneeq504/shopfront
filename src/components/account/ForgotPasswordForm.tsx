@@ -37,8 +37,8 @@ export function ForgotPasswordForm() {
           if (await post({})) setSent(true);
         }}
       >
-        <h1 className="text-xl font-semibold">Reset your password</h1>
-        <p className="text-sm text-slate-400">
+        <h1 className="font-display text-2xl font-bold">Reset your password</h1>
+        <p className="text-sm text-muted">
           Enter your account email and we&apos;ll send you a 6-digit code.
         </p>
         <label className="text-sm font-medium">
@@ -52,11 +52,11 @@ export function ForgotPasswordForm() {
             className="input mt-1 w-full"
           />
         </label>
-        {error && <p className="text-sm text-red-400">{error}</p>}
+        {error && <p className="text-sm text-berry">{error}</p>}
         <button type="submit" disabled={submitting} className="btn-primary">
           {submitting ? "Sending code..." : "Send code"}
         </button>
-        <Link href="/account/login" className="text-sm text-amber-400 hover:underline">
+        <Link href="/account/login" className="text-sm text-coralDark hover:underline">
           Back to sign in
         </Link>
       </form>
@@ -80,9 +80,9 @@ export function ForgotPasswordForm() {
         }
       }}
     >
-      <h1 className="text-xl font-semibold">Choose a new password</h1>
-      <p className="text-sm text-slate-400">
-        If an account exists for <span className="text-slate-200">{email}</span>, we emailed it
+      <h1 className="font-display text-2xl font-bold">Choose a new password</h1>
+      <p className="text-sm text-muted">
+        If an account exists for <span className="text-ink">{email}</span>, we emailed it
         a 6-digit code. It expires in 10 minutes.
       </p>
       <input
@@ -99,8 +99,8 @@ export function ForgotPasswordForm() {
         New password
         <input name="password" type="password" required minLength={8} className="input mt-1 w-full" />
       </label>
-      {notice && <p className="text-sm text-emerald-400">{notice}</p>}
-      {error && <p className="text-sm text-red-400">{error}</p>}
+      {notice && <p className="text-sm text-leaf">{notice}</p>}
+      {error && <p className="text-sm text-berry">{error}</p>}
       <button type="submit" disabled={submitting} className="btn-primary">
         {submitting ? "Saving..." : "Reset password"}
       </button>
@@ -111,7 +111,7 @@ export function ForgotPasswordForm() {
           onClick={async () => {
             if (await post({})) setNotice("A new code is on its way.");
           }}
-          className="text-amber-400 hover:underline"
+          className="text-coralDark hover:underline"
         >
           Resend code
         </button>
@@ -122,7 +122,7 @@ export function ForgotPasswordForm() {
             setError("");
             setNotice("");
           }}
-          className="text-slate-400 hover:underline"
+          className="text-muted hover:underline"
         >
           Use a different email
         </button>

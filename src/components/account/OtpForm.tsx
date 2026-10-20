@@ -47,10 +47,10 @@ export function OtpForm({
   return (
     <form onSubmit={onSubmit} className="flex flex-col gap-4">
       <div>
-        <h2 className="text-lg font-semibold">Enter the 6-digit code</h2>
-        <p className="mt-1 text-sm text-slate-400">
+        <h2 className="font-display text-xl font-bold">Enter the 6-digit code</h2>
+        <p className="mt-1 text-sm text-muted">
           {description} We emailed a code to{" "}
-          <span className="text-slate-200">{email}</span>. It expires in 10 minutes.
+          <span className="text-ink">{email}</span>. It expires in 10 minutes.
         </p>
       </div>
       <input
@@ -63,8 +63,8 @@ export function OtpForm({
         placeholder="000000"
         className="input text-center text-2xl tracking-[0.5em]"
       />
-      {error && <p className="text-sm text-red-400">{error}</p>}
-      {notice && <p className="text-sm text-emerald-400">{notice}</p>}
+      {error && <p className="text-sm text-berry">{error}</p>}
+      {notice && <p className="text-sm text-leaf">{notice}</p>}
       <button type="submit" disabled={submitting} className="btn-primary">
         {submitting ? "Verifying..." : "Verify"}
       </button>
@@ -72,7 +72,7 @@ export function OtpForm({
         {onResend && (
           <button
             type="button"
-            className="text-amber-400 hover:underline"
+            className="text-coralDark hover:underline"
             onClick={async () => {
               setError("");
               await onResend();
@@ -85,7 +85,7 @@ export function OtpForm({
         {onCancel && (
           <button
             type="button"
-            className="text-slate-400 hover:underline"
+            className="text-muted hover:underline"
             onClick={onCancel}
           >
             Cancel

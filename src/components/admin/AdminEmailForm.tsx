@@ -40,8 +40,8 @@ export function AdminEmailForm({ currentEmail }: { currentEmail: string }) {
     <section className="card flex flex-col gap-3 p-4 text-sm">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <p className="font-medium">Owner email</p>
-          <p className="text-slate-400">
+          <p className="font-display text-lg font-semibold">Owner email</p>
+          <p className="text-muted">
             {currentEmail || "Not set"} &middot; admin login codes are sent here
           </p>
         </div>
@@ -52,7 +52,7 @@ export function AdminEmailForm({ currentEmail }: { currentEmail: string }) {
         )}
       </div>
 
-      {notice && <p className="text-emerald-400">{notice}</p>}
+      {notice && <p className="text-leaf">{notice}</p>}
 
       {editing && !codeSent && (
         <form
@@ -108,8 +108,8 @@ export function AdminEmailForm({ currentEmail }: { currentEmail: string }) {
             }
           }}
         >
-          <p className="text-slate-400">
-            We emailed a 6-digit code to <span className="text-slate-200">{email}</span>. Enter it
+          <p className="text-muted">
+            We emailed a 6-digit code to <span className="text-ink">{email}</span>. Enter it
             to confirm the new address. It expires in 10 minutes.
           </p>
           <div className="flex flex-col gap-2 sm:flex-row">
@@ -143,7 +143,7 @@ export function AdminEmailForm({ currentEmail }: { currentEmail: string }) {
         </form>
       )}
 
-      {error && <p className="text-red-400">{error}</p>}
+      {error && <p className="text-berry">{error}</p>}
     </section>
   );
 }

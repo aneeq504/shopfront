@@ -24,7 +24,7 @@ export default async function ProductPage({
 
   return (
     <div className="flex flex-col gap-6">
-      <Link href="/" className="text-sm text-amber-400 hover:underline">
+      <Link href="/" className="text-sm text-coralDark hover:underline">
         &larr; Back to products
       </Link>
       <ProductDetail

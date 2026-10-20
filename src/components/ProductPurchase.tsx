@@ -27,10 +27,10 @@ export function ProductPurchase({
             type="button"
             aria-pressed={color.id === selectedColorId}
             onClick={() => onSelectColor(color.id)}
-            className={`rounded-lg border px-3 py-2 text-sm transition ${
+            className={`chip ${
               color.id === selectedColorId
-                ? "border-amber-500 bg-amber-500/10 text-amber-400"
-                : "border-slate-700 text-slate-200 hover:border-slate-500"
+                ? "bg-butter shadow-pop-sm"
+                : "bg-white hover:bg-butter"
             } ${color.stock <= 0 ? "opacity-50 line-through" : ""}`}
           >
             {color.name}
@@ -44,7 +44,7 @@ export function ProductPurchase({
       ) : (
         <>
           {selectedColor.stock > 0 && (
-            <p className="text-sm text-slate-400">
+            <p className="text-sm text-muted">
               {selectedColor.stock} left in {selectedColor.name}
             </p>
           )}

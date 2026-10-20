@@ -56,9 +56,9 @@ export default function AdminLoginPage() {
     return (
       <form key="code" onSubmit={verifyCode} className="card mx-auto flex max-w-sm flex-col gap-4 p-6">
         <div>
-          <h1 className="text-xl font-semibold">Enter the 6-digit code</h1>
-          <p className="mt-1 text-sm text-slate-400">
-            We emailed a login code to <span className="text-slate-200">{sentTo}</span>. It
+          <h1 className="font-display text-2xl font-bold">Enter the 6-digit code</h1>
+          <p className="mt-1 text-sm text-muted">
+            We emailed a login code to <span className="text-ink">{sentTo}</span>. It
             expires in 10 minutes.
           </p>
         </div>
@@ -72,22 +72,22 @@ export default function AdminLoginPage() {
           placeholder="000000"
           className="input text-center text-2xl tracking-[0.5em]"
         />
-        {error && <p className="text-sm text-red-400">{error}</p>}
-        {notice && <p className="text-sm text-emerald-400">{notice}</p>}
+        {error && <p className="text-sm text-berry">{error}</p>}
+        {notice && <p className="text-sm text-leaf">{notice}</p>}
         <button type="submit" disabled={submitting} className="btn-primary">
           {submitting ? "Verifying..." : "Verify"}
         </button>
         <div className="flex gap-4 text-sm">
           <button
             type="button"
-            className="text-amber-400 hover:underline"
+            className="text-coralDark hover:underline"
             onClick={() => requestCode()}
           >
             Resend code
           </button>
           <button
             type="button"
-            className="text-slate-400 hover:underline"
+            className="text-muted hover:underline"
             onClick={() => {
               setSentTo("");
               setPassword("");
@@ -104,7 +104,7 @@ export default function AdminLoginPage() {
 
   return (
     <form key="password" onSubmit={requestCode} className="card mx-auto flex max-w-sm flex-col gap-4 p-6">
-      <h1 className="text-xl font-semibold">Owner login</h1>
+      <h1 className="font-display text-2xl font-bold">Owner login</h1>
       <input
         name="password"
         type="password"
@@ -114,14 +114,14 @@ export default function AdminLoginPage() {
         placeholder="Admin password"
         className="input"
       />
-      <p className="text-xs text-slate-500">
+      <p className="text-xs text-muted">
         After your password we email a 6-digit code to the owner address.
       </p>
-      {error && <p className="text-sm text-red-400">{error}</p>}
+      {error && <p className="text-sm text-berry">{error}</p>}
       <button type="submit" disabled={submitting} className="btn-primary">
         {submitting ? "Sending code..." : "Continue"}
       </button>
-      <Link href="/admin/forgot" className="text-sm text-amber-400 hover:underline">
+      <Link href="/admin/forgot" className="text-sm text-coralDark hover:underline">
         Forgot password?
       </Link>
     </form>

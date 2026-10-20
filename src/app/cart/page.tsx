@@ -9,9 +9,9 @@ export default function CartPage() {
 
   if (items.length === 0) {
     return (
-      <div className="rounded-xl border border-dashed border-slate-700 bg-slate-900/50 p-10 text-center">
-        <p className="text-slate-400">Your cart is empty.</p>
-        <Link href="/" className="mt-4 inline-block text-amber-400 hover:underline">
+      <div className="card flex flex-col items-center gap-3 p-10 text-center">
+        <p className="font-display text-xl font-semibold">Your cart is empty.</p>
+        <Link href="/" className="mt-4 inline-block text-coralDark hover:underline">
           Browse products
         </Link>
       </div>
@@ -20,11 +20,11 @@ export default function CartPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <h1 className="text-2xl font-semibold">Your cart</h1>
-      <div className="card divide-y divide-slate-800">
+      <h1 className="font-display text-3xl font-bold">Your cart</h1>
+      <div className="card divide-y divide-ink/10">
         {items.map((item) => (
-          <div key={lineKey(item.productId, item.colorId)} className="flex items-center gap-4 p-4">
-            <div className="h-20 w-20 shrink-0 overflow-hidden rounded-lg bg-slate-800">
+          <div key={lineKey(item.productId, item.colorId)} className="flex flex-wrap items-center gap-4 p-4 sm:flex-nowrap">
+            <div className="h-20 w-20 shrink-0 overflow-hidden rounded-2xl border-2 border-ink/15 bg-lavender/30">
               {item.imageUrl ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
@@ -37,14 +37,14 @@ export default function CartPage() {
             <div className="flex-1">
               <Link
                 href={`/products/${item.productId}`}
-                className="font-medium transition hover:text-amber-400"
+                className="font-medium transition hover:text-coralDark"
               >
                 {item.name}
               </Link>
               {item.colorName && (
-                <p className="text-sm text-slate-400">Color: {item.colorName}</p>
+                <p className="text-sm text-muted">Color: {item.colorName}</p>
               )}
-              <p className="text-sm text-slate-400">{formatPrice(item.priceCents)}</p>
+              <p className="text-sm text-muted">{formatPrice(item.priceCents)}</p>
             </div>
             <input
               type="number"
@@ -63,7 +63,7 @@ export default function CartPage() {
             <button
               type="button"
               onClick={() => removeItem(lineKey(item.productId, item.colorId))}
-              className="text-sm text-red-400 hover:underline"
+              className="text-sm text-berry hover:underline"
             >
               Remove
             </button>
@@ -71,12 +71,12 @@ export default function CartPage() {
         ))}
       </div>
       <div className="card flex items-center justify-between p-4">
-        <button type="button" onClick={clear} className="text-sm text-slate-400 hover:underline">
+        <button type="button" onClick={clear} className="text-sm text-muted hover:underline">
           Clear cart
         </button>
         <div className="flex items-center gap-6">
           <p className="text-lg">
-            Total: <span className="font-bold text-amber-400">{formatPrice(totalCents)}</span>
+            Total: <span className="font-bold text-coralDark">{formatPrice(totalCents)}</span>
           </p>
           <Link href="/checkout" className="btn-primary px-5">
             Checkout

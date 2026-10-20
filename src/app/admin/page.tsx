@@ -35,7 +35,7 @@ export default async function AdminPage() {
   return (
     <div className="flex flex-col gap-8">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold">Admin panel</h1>
+        <h1 className="font-display text-3xl font-bold">Admin panel</h1>
         <div className="flex items-center gap-3">
           <Link
             href="/admin/products/new"
@@ -53,10 +53,10 @@ export default async function AdminPage() {
       <AdminPasswordForm />
 
       <section className="flex flex-col gap-3">
-        <h2 className="text-lg font-medium">Products ({products.length})</h2>
-        <div className="card divide-y divide-slate-800">
+        <h2 className="font-display text-2xl font-bold">Products ({products.length})</h2>
+        <div className="card divide-y divide-ink/10">
           {products.length === 0 ? (
-            <p className="p-6 text-sm text-slate-400">No products yet.</p>
+            <p className="p-6 text-sm text-muted">No products yet.</p>
           ) : (
             products.map((product) => (
               <AdminProductRow
@@ -76,10 +76,10 @@ export default async function AdminPage() {
       </section>
 
       <section className="flex flex-col gap-3">
-        <h2 className="text-lg font-medium">Orders ({orders.length})</h2>
-        <div className="card divide-y divide-slate-800">
+        <h2 className="font-display text-2xl font-bold">Orders ({orders.length})</h2>
+        <div className="card divide-y divide-ink/10">
           {orders.length === 0 ? (
-            <p className="p-6 text-sm text-slate-400">No orders yet.</p>
+            <p className="p-6 text-sm text-muted">No orders yet.</p>
           ) : (
             orders.map((order) => {
               const state = orderState(order);
@@ -87,27 +87,27 @@ export default async function AdminPage() {
               <div key={order.id} className="flex flex-col gap-1 p-4 text-sm">
                 <div className="flex justify-between">
                   <span className="font-medium">{order.customerName}</span>
-                  <span className="font-semibold text-amber-400">
+                  <span className="font-semibold text-coralDark">
                     {formatPrice(order.totalCents)}
                   </span>
                 </div>
                 <div className="flex flex-wrap items-center gap-2 text-xs">
                   <span
-                    className={`w-fit rounded-full bg-slate-800 px-2 py-0.5 ${orderStateClasses[state]}`}
+                    className={`w-fit rounded-full bg-lavender/30 px-2 py-0.5 ${orderStateClasses[state]}`}
                   >
                     {orderStateLabel(state)}
                   </span>
-                  <span className="text-slate-500">
+                  <span className="text-muted">
                     Ordered {formatDateTime(order.createdAt)}
                     {order.shippedAt && ` · shipped ${formatDateTime(order.shippedAt)}`}
                     {order.deliveredAt && ` · delivered ${formatDateTime(order.deliveredAt)}`}
                   </span>
                 </div>
-                <span className="text-slate-400">
+                <span className="text-muted">
                   {order.customerEmail} &middot; {order.customerPhone || "no phone"} &middot;{" "}
                   {order.address}
                 </span>
-                <span className="text-slate-400">
+                <span className="text-muted">
                   {order.items
                     .map((item) =>
                       `${item.productName}${item.colorName ? ` (${item.colorName})` : ""} x${item.quantity}`,

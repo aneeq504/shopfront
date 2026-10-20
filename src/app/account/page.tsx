@@ -24,8 +24,8 @@ export default async function AccountPage() {
       <div className="flex flex-col gap-4">
         <div className="card flex items-center justify-between gap-4 p-6">
           <div>
-            <p className="text-lg font-semibold">{customer.name}</p>
-            <p className="text-sm text-slate-400">{customer.email}</p>
+            <p className="font-display text-xl font-bold">{customer.name}</p>
+            <p className="text-sm text-muted">{customer.email}</p>
           </div>
           <SignOutButton />
         </div>
@@ -38,17 +38,17 @@ export default async function AccountPage() {
       </div>
 
       <section className="card p-6">
-        <h2 className="mb-4 text-lg font-semibold">Your orders</h2>
+        <h2 className="mb-4 font-display text-2xl font-bold">Your orders</h2>
         {orders.length === 0 ? (
-          <p className="text-sm text-slate-400">
+          <p className="text-sm text-muted">
             No orders yet.{" "}
-            <Link href="/" className="text-amber-400 hover:underline">
+            <Link href="/" className="text-coralDark hover:underline">
               Start shopping
             </Link>
             .
           </p>
         ) : (
-          <ul className="divide-y divide-slate-800">
+          <ul className="divide-y divide-ink/10">
             {orders.map((order) => {
               const state = orderState(order);
               return (
@@ -56,13 +56,13 @@ export default async function AccountPage() {
                   <div className="flex justify-between gap-4">
                     <Link
                       href={`/orders/${order.id}`}
-                      className="font-mono text-amber-400 hover:underline"
+                      className="font-mono text-coralDark hover:underline"
                     >
                       {order.id.slice(-8)}
                     </Link>
                     <span className={orderStateClasses[state]}>{orderStateLabel(state)}</span>
                   </div>
-                  <div className="flex justify-between gap-4 text-slate-400">
+                  <div className="flex justify-between gap-4 text-muted">
                     <span>
                       {order.items.length} item(s) &middot;{" "}
                       {order.createdAt.toLocaleString("en-GB", { timeZone: "UTC" })}

@@ -57,30 +57,30 @@ export function AdminProductRow({
   return (
     <div className="flex flex-wrap items-center gap-4 p-4 text-sm">
       <div className="min-w-48 flex-1">
-        <p className="font-medium text-slate-100">{product.name}</p>
-        <p className="text-slate-400">
+        <p className="font-display text-lg font-semibold text-ink">{product.name}</p>
+        <p className="text-muted">
           {product.category} &middot; {product.price}
         </p>
-        {error && <p className="text-red-400">{error}</p>}
+        {error && <p className="text-berry">{error}</p>}
       </div>
 
       {product.colors.length > 0 ? (
         <div className="flex flex-col gap-1">
-          <span className="text-sm text-slate-300">
-            Stock {product.stock} <span className="text-slate-500">(per color)</span>
+          <span className="text-sm text-ink">
+            Stock {product.stock} <span className="text-muted">(per color)</span>
           </span>
-          <span className="text-xs text-slate-500">
+          <span className="text-xs text-muted">
             {product.colors.map((color) => `${color.name} ${color.stock}`).join(" · ")}
           </span>
         </div>
       ) : (
         <div className="flex items-center gap-2">
-          <span className="text-xs uppercase tracking-wide text-slate-500">Stock</span>
+          <span className="text-xs uppercase tracking-wide text-muted">Stock</span>
           <button
             type="button"
             onClick={() => saveStock(stock - 1)}
             disabled={saving || stock <= 0}
-            className="h-8 w-8 rounded-lg border border-slate-700 text-slate-200 transition hover:border-slate-500 hover:bg-slate-800 disabled:opacity-40"
+            className="h-9 w-9 rounded-full border-2 border-ink bg-white font-bold text-ink shadow-pop-sm transition hover:bg-butter disabled:opacity-40"
             aria-label={`Decrease stock for ${product.name}`}
           >
             &minus;
@@ -98,16 +98,16 @@ export function AdminProductRow({
             type="button"
             onClick={() => saveStock(stock + 1)}
             disabled={saving}
-            className="h-8 w-8 rounded-lg border border-slate-700 text-slate-200 transition hover:border-slate-500 hover:bg-slate-800 disabled:opacity-40"
+            className="h-9 w-9 rounded-full border-2 border-ink bg-white font-bold text-ink shadow-pop-sm transition hover:bg-butter disabled:opacity-40"
             aria-label={`Increase stock for ${product.name}`}
           >
             +
           </button>
           <span
-            className={`rounded-full px-2 py-0.5 text-xs ${
+            className={`rounded-full border-2 border-ink px-2 py-0.5 text-xs font-semibold ${
               stock > 0
-                ? "bg-emerald-500/10 text-emerald-400"
-                : "bg-red-500/10 text-red-400"
+                ? "bg-mint text-leaf"
+                : "bg-blush text-berry"
             }`}
           >
             {stock > 0 ? "In stock" : "Out of stock"}
@@ -121,7 +121,7 @@ export function AdminProductRow({
       <button
         type="button"
         onClick={onDelete}
-        className="rounded-lg border border-red-500/40 px-3 py-1 text-red-400 transition hover:bg-red-500/10"
+        className="rounded-full border-2 border-ink bg-blush px-3 py-1.5 font-semibold text-berry shadow-pop-sm transition hover:bg-peach"
       >
         Delete
       </button>
