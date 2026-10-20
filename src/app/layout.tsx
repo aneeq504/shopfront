@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { CartProvider } from "@/components/CartProvider";
 import { Header } from "@/components/Header";
+import { isAdmin } from "@/lib/auth";
 import { currentCustomer } from "@/lib/customer-auth";
 import { unreadNotificationCount } from "@/lib/notifications";
 
@@ -27,6 +28,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const admin = isAdmin();
   const customer = await currentCustomer();
   const unreadCount = customer ? await unreadNotificationCount(customer.id) : 0;
 
@@ -37,6 +39,7 @@ export default async function RootLayout({
       >
         <CartProvider>
           <Header
+            isAdmin={admin}
             customerName={customer?.name ?? null}
             unreadNotifications={unreadCount}
           />

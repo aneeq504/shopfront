@@ -7,7 +7,7 @@ export type ProductInput = {
   stock: number;
   category: string;
   images: string[];
-  colors: { id?: string; name: string; stock: number }[];
+  colors: { id?: string; name: string; stock: number; images: string[] }[];
 };
 
 function isImageUrl(url: string): boolean {
@@ -27,16 +27,25 @@ export function parseProductInput(
   if (!Number.isFinite(price) || price < 0) return { error: "Price must be a positive number" };
   if (!Array.isArray(rawColors)) return { error: "Invalid colors" };
   if (rawColors.length > 20) return { error: "A product can have at most 20 colors" };
+  if (images.length > MAX_PRODUCT_IMAGES) {
+    return { error: `A product can have at most ${MAX_PRODUCT_IMAGES} photos` };
+  }
+  if (!images.every((url) => typeof url === "string" && isImageUrl(url))) {
+    return { error: "Invalid photo" };
+  }
 
   const colors: ProductInput["colors"] = [];
   const colorNames = new Set<string>();
   const colorIds = new Set<string>();
+  const mainImages = Array.from(new Set(images as string[]));
+  const usedImageUrls = new Set(mainImages);
   for (const value of rawColors) {
     if (!value || typeof value !== "object") return { error: "Invalid color" };
     const color = value as Record<string, unknown>;
     const colorName = typeof color.name === "string" ? color.name.trim() : "";
     const stock = Number(color.stock);
     const id = typeof color.id === "string" ? color.id.trim() : "";
+    const rawColorImages = color.images === undefined ? [] : color.images;
 
     if (!colorName) return { error: "Color name is required" };
     if (colorName.length > 30) {
@@ -49,14 +58,31 @@ export function parseProductInput(
     if (!Number.isFinite(stock) || stock < 0) {
       return { error: "Color stock must be a positive number" };
     }
+    if (!Array.isArray(rawColorImages)) return { error: "Invalid photo" };
+    if (rawColorImages.length > MAX_PRODUCT_IMAGES) {
+      return { error: `A color can have at most ${MAX_PRODUCT_IMAGES} photos` };
+    }
+    if (!rawColorImages.every((url) => typeof url === "string" && isImageUrl(url))) {
+      return { error: "Invalid photo" };
+    }
     if (color.id !== undefined && typeof color.id !== "string") {
       return { error: "Invalid color" };
     }
     if (id && colorIds.has(id)) return { error: "Invalid color" };
 
+    const colorImages = Array.from(new Set(rawColorImages as string[]));
+    if (colorImages.some((url) => usedImageUrls.has(url))) {
+      return { error: "A photo can only be used once" };
+    }
+    colorImages.forEach((url) => usedImageUrls.add(url));
     colorNames.add(normalizedName);
     if (id) colorIds.add(id);
-    colors.push({ ...(id ? { id } : {}), name: colorName, stock: Math.floor(stock) });
+    colors.push({
+      ...(id ? { id } : {}),
+      name: colorName,
+      stock: Math.floor(stock),
+      images: colorImages,
+    });
   }
 
   const postedStock = Number(raw.stock ?? 0);
@@ -68,13 +94,6 @@ export function parseProductInput(
     : Math.floor(postedStock);
   if (!Number.isSafeInteger(stock)) return { error: "Stock is too large" };
 
-  if (images.length > MAX_PRODUCT_IMAGES) {
-    return { error: `A product can have at most ${MAX_PRODUCT_IMAGES} photos` };
-  }
-  if (!images.every((url) => typeof url === "string" && isImageUrl(url))) {
-    return { error: "Invalid photo" };
-  }
-
   return {
     data: {
       name,
@@ -85,21 +104,29 @@ export function parseProductInput(
         typeof raw.category === "string" && raw.category.trim()
           ? raw.category.trim()
           : "General",
-      images: Array.from(new Set(images as string[])),
+      images: mainImages,
       colors,
     },
   };
 }
 
 /** Prisma data for a product's fields; the first photo doubles as the cover `imageUrl`. */
-function productFieldsData({ name, description, priceCents, stock, category, images }: ProductInput) {
+function productFieldsData({
+  name,
+  description,
+  priceCents,
+  stock,
+  category,
+  images,
+  colors,
+}: ProductInput) {
   return {
     name,
     description,
     priceCents,
     stock,
     category,
-    imageUrl: images[0] ?? "",
+    imageUrl: images[0] ?? colors.find((color) => color.images.length > 0)?.images[0] ?? "",
     images: { create: images.map((url, position) => ({ url, position })) },
   };
 }

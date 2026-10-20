@@ -13,6 +13,20 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: parsed.error }, { status: 400 });
   }
 
-  const product = await prisma.product.create({ data: productData(parsed.data) });
+  const product = await prisma.product.create({
+    data: productData(parsed.data),
+    include: { colors: { orderBy: { position: "asc" }, select: { id: true } } },
+  });
+  const colorImages = parsed.data.colors.flatMap((color, index) =>
+    color.images.map((url, position) => ({
+      productId: product.id,
+      colorId: product.colors[index].id,
+      url,
+      position,
+    })),
+  );
+  if (colorImages.length) {
+    await prisma.productImage.createMany({ data: colorImages });
+  }
   return NextResponse.json({ id: product.id }, { status: 201 });
 }

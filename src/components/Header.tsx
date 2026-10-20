@@ -5,9 +5,11 @@ import { useCart } from "./CartProvider";
 import { NotificationBell } from "./NotificationBell";
 
 export function Header({
+  isAdmin,
   customerName,
   unreadNotifications,
 }: {
+  isAdmin: boolean;
   customerName: string | null;
   unreadNotifications: number;
 }) {
@@ -24,9 +26,11 @@ export function Header({
           <Link href="/" className="text-slate-300 transition hover:text-amber-400">
             Products
           </Link>
-          <Link href="/admin" className="text-slate-300 transition hover:text-amber-400">
-            Admin
-          </Link>
+          {isAdmin && (
+            <Link href="/admin" className="text-slate-300 transition hover:text-amber-400">
+              Admin
+            </Link>
+          )}
           {customerName && (
             <NotificationBell unreadNotifications={unreadNotifications} />
           )}

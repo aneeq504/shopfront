@@ -1,9 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { AddToCartButton } from "@/components/AddToCartButton";
-import { ProductGallery } from "@/components/ProductGallery";
-import { ProductPurchase } from "@/components/ProductPurchase";
-import { formatPrice } from "@/lib/format";
+import { ProductDetail } from "@/components/ProductDetail";
 import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
@@ -16,8 +13,11 @@ export default async function ProductPage({
   const product = await prisma.product.findUnique({
     where: { id: params.id },
     include: {
-      images: { orderBy: { position: "asc" } },
-      colors: { orderBy: { position: "asc" } },
+      images: { where: { colorId: null }, orderBy: { position: "asc" } },
+      colors: {
+        orderBy: { position: "asc" },
+        include: { images: { orderBy: { position: "asc" } } },
+      },
     },
   });
   if (!product) notFound();
@@ -27,57 +27,24 @@ export default async function ProductPage({
       <Link href="/" className="text-sm text-amber-400 hover:underline">
         &larr; Back to products
       </Link>
-      <div className="card grid gap-8 p-6 md:grid-cols-2">
-        <ProductGallery
-          images={product.images.map((image) => image.url)}
-          name={product.name}
-          outOfStock={product.stock <= 0}
-        />
-        <div className="flex flex-col gap-4">
-          <span className="text-xs uppercase tracking-wide text-slate-500">
-            {product.category}
-          </span>
-          <h1 className="text-2xl font-semibold text-slate-100">{product.name}</h1>
-          <p className="text-3xl font-bold text-amber-400">
-            {formatPrice(product.priceCents)}
-          </p>
-          <p
-            className={`w-fit rounded-full px-3 py-1 text-sm ${
-              product.stock > 0
-                ? "bg-emerald-500/10 text-emerald-400"
-                : "bg-red-500/10 text-red-400"
-            }`}
-          >
-            {product.stock > 0 ? `${product.stock} in stock` : "Out of stock"}
-          </p>
-          <p className="whitespace-pre-line text-slate-300">{product.description}</p>
-          <div className="max-w-xs">
-            {product.colors.length > 0 ? (
-              <ProductPurchase
-                product={{
-                  productId: product.id,
-                  name: product.name,
-                  priceCents: product.priceCents,
-                  imageUrl: product.imageUrl,
-                  stock: product.stock,
-                }}
-                colors={product.colors.map(({ id, name, stock }) => ({ id, name, stock }))}
-              />
-            ) : (
-              <AddToCartButton
-                product={{
-                  productId: product.id,
-                  name: product.name,
-                  priceCents: product.priceCents,
-                  imageUrl: product.imageUrl,
-                  stock: product.stock,
-                }}
-                disabled={product.stock <= 0}
-              />
-            )}
-          </div>
-        </div>
-      </div>
+      <ProductDetail
+        product={{
+          productId: product.id,
+          name: product.name,
+          priceCents: product.priceCents,
+          imageUrl: product.imageUrl,
+          stock: product.stock,
+          category: product.category,
+          description: product.description,
+        }}
+        mainImages={product.images.map((image) => image.url)}
+        colors={product.colors.map(({ id, name, stock, images }) => ({
+          id,
+          name,
+          stock,
+          images: images.map((image) => image.url),
+        }))}
+      />
     </div>
   );
 }

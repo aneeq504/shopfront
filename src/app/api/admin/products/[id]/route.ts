@@ -28,6 +28,10 @@ export async function PUT(
 
   const previous = await prisma.productImage.findMany({ where: { productId: params.id } });
   const data = productUpdateData(parsed.data);
+  const submittedImageUrls = new Set([
+    ...parsed.data.images,
+    ...parsed.data.colors.flatMap((color) => color.images),
+  ]);
   const colorOperations = [
     prisma.productColor.deleteMany({
       where: {
@@ -37,9 +41,20 @@ export async function PUT(
     }),
     ...parsed.data.colors.map((color, position) =>
       color.id
-        ? prisma.productColor.updateMany({
-            where: { id: color.id, productId: params.id },
-            data: { name: color.name, stock: color.stock, position },
+        ? prisma.productColor.update({
+            where: { id: color.id },
+            data: {
+              name: color.name,
+              stock: color.stock,
+              position,
+              images: {
+                create: color.images.map((url, imagePosition) => ({
+                  url,
+                  position: imagePosition,
+                  product: { connect: { id: params.id } },
+                })),
+              },
+            },
           })
         : prisma.productColor.create({
             data: {
@@ -47,6 +62,13 @@ export async function PUT(
               name: color.name,
               stock: color.stock,
               position,
+              images: {
+                create: color.images.map((url, imagePosition) => ({
+                  url,
+                  position: imagePosition,
+                  product: { connect: { id: params.id } },
+                })),
+              },
             },
           }),
     ),
@@ -59,7 +81,7 @@ export async function PUT(
     ...colorOperations,
   ]);
   await deleteUploads(
-    previous.map((image) => image.url).filter((url) => !parsed.data.images.includes(url)),
+    previous.map((image) => image.url).filter((url) => !submittedImageUrls.has(url)),
   );
   return NextResponse.json({ ok: true });
 }

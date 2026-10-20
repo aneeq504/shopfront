@@ -1,9 +1,8 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useRef, useState } from "react";
-
-const MAX_IMAGES = 10;
+import { useState } from "react";
+import { PhotoPicker } from "@/components/admin/PhotoPicker";
 
 export type ProductFormValues = {
   name: string;
@@ -12,7 +11,7 @@ export type ProductFormValues = {
   images: string[];
   stock: string;
   category: string;
-  colors: { id?: string; name: string; stock: number }[];
+  colors: { id?: string; name: string; stock: number; images: string[] }[];
 };
 
 export function ProductForm({
@@ -23,14 +22,13 @@ export function ProductForm({
   productId?: string;
 }) {
   const router = useRouter();
-  const fileInput = useRef<HTMLInputElement>(null);
   const [images, setImages] = useState(initialValues.images);
   const [stock, setStock] = useState(initialValues.stock);
   const [colors, setColors] = useState(
     initialValues.colors.map((color) => ({ ...color, stock: String(color.stock) })),
   );
   const [error, setError] = useState("");
-  const [uploading, setUploading] = useState(false);
+  const [activeUploads, setActiveUploads] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const totalColorStock = colors.reduce(
     (total, color) =>
@@ -38,33 +36,6 @@ export function ProductForm({
       (Number.isFinite(Number(color.stock)) ? Math.floor(Number(color.stock)) : 0),
     0,
   );
-
-  async function onFilesChosen(event: React.ChangeEvent<HTMLInputElement>) {
-    const files = Array.from(event.target.files ?? []);
-    event.target.value = "";
-    if (files.length === 0) return;
-    if (images.length + files.length > MAX_IMAGES) {
-      setError(`A product can have at most ${MAX_IMAGES} photos`);
-      return;
-    }
-    setUploading(true);
-    setError("");
-    const body = new FormData();
-    files.forEach((file) => body.append("files", file));
-    const response = await fetch("/api/admin/uploads", { method: "POST", body });
-    const data = (await response.json()) as { urls?: string[]; error?: string };
-    setUploading(false);
-    if (data.urls?.length) setImages((current) => [...current, ...data.urls!]);
-    if (!response.ok) setError(data.error ?? "Could not upload photos");
-  }
-
-  function makeCover(url: string) {
-    setImages((current) => [url, ...current.filter((u) => u !== url)]);
-  }
-
-  function removeImage(url: string) {
-    setImages((current) => current.filter((u) => u !== url));
-  }
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -152,7 +123,9 @@ export function ProductForm({
           <h2 className="text-sm font-medium">Colors</h2>
           <button
             type="button"
-            onClick={() => setColors((current) => [...current, { name: "", stock: "0" }])}
+            onClick={() =>
+              setColors((current) => [...current, { name: "", stock: "0", images: [] }])
+            }
             disabled={colors.length >= 20}
             className="btn-ghost text-sm"
           >
@@ -162,50 +135,67 @@ export function ProductForm({
         {colors.map((color, index) => (
           <div
             key={color.id ?? `new-${index}`}
-            className="grid grid-cols-[1fr_6rem_auto] items-end gap-2"
+            className="flex flex-col gap-3 rounded-lg border border-slate-800 p-3"
           >
-            <label className="text-sm">
-              Name
-              <input
-                value={color.name}
-                maxLength={30}
-                onChange={(event) =>
-                  setColors((current) =>
-                    current.map((item, itemIndex) =>
-                      itemIndex === index ? { ...item, name: event.target.value } : item,
-                    ),
-                  )
+            <div className="grid grid-cols-[1fr_6rem_auto] items-end gap-2">
+              <label className="text-sm">
+                Name
+                <input
+                  value={color.name}
+                  maxLength={30}
+                  onChange={(event) =>
+                    setColors((current) =>
+                      current.map((item, itemIndex) =>
+                        itemIndex === index ? { ...item, name: event.target.value } : item,
+                      ),
+                    )
+                  }
+                  className="input mt-1 w-full"
+                />
+              </label>
+              <label className="text-sm">
+                Stock
+                <input
+                  type="number"
+                  min="0"
+                  step="1"
+                  value={color.stock}
+                  onChange={(event) =>
+                    setColors((current) =>
+                      current.map((item, itemIndex) =>
+                        itemIndex === index ? { ...item, stock: event.target.value } : item,
+                      ),
+                    )
+                  }
+                  className="input mt-1 w-full"
+                />
+              </label>
+              <button
+                type="button"
+                onClick={() =>
+                  setColors((current) => current.filter((_, itemIndex) => itemIndex !== index))
                 }
-                className="input mt-1 w-full"
-              />
-            </label>
-            <label className="text-sm">
-              Stock
-              <input
-                type="number"
-                min="0"
-                step="1"
-                value={color.stock}
-                onChange={(event) =>
-                  setColors((current) =>
-                    current.map((item, itemIndex) =>
-                      itemIndex === index ? { ...item, stock: event.target.value } : item,
-                    ),
-                  )
-                }
-                className="input mt-1 w-full"
-              />
-            </label>
-            <button
-              type="button"
-              onClick={() =>
-                setColors((current) => current.filter((_, itemIndex) => itemIndex !== index))
+                disabled={activeUploads > 0}
+                aria-label={`Remove ${color.name || "color"}`}
+                className="btn-ghost px-3 py-2 text-red-400 disabled:opacity-50"
+              >
+                Remove
+              </button>
+            </div>
+            <PhotoPicker
+              label="Color photos"
+              images={color.images}
+              onChange={(nextImages) =>
+                setColors((current) =>
+                  current.map((item, itemIndex) =>
+                    itemIndex === index ? { ...item, images: nextImages } : item,
+                  ),
+                )
               }
-              aria-label={`Remove ${color.name || "color"}`}
-              className="btn-ghost px-3 py-2 text-red-400"
-            >
-              Remove
-            </button>
+              onUploadingChange={(uploading) =>
+                setActiveUploads((count) => count + (uploading ? 1 : -1))
+              }
+            />
           </div>
         ))}
       </section>
@@ -218,79 +208,18 @@ export function ProductForm({
         />
       </label>
 
-      <div className="flex flex-col gap-2">
-        <div className="flex items-center justify-between">
-          <span className="text-sm font-medium">
-            Photos ({images.length}/{MAX_IMAGES})
-          </span>
-          <button
-            type="button"
-            onClick={() => fileInput.current?.click()}
-            disabled={uploading || images.length >= MAX_IMAGES}
-            className="btn-ghost text-sm"
-          >
-            {uploading ? "Uploading..." : "Upload photos"}
-          </button>
-          <input
-            ref={fileInput}
-            type="file"
-            accept="image/jpeg,image/png,image/gif,image/webp"
-            multiple
-            hidden
-            onChange={onFilesChosen}
-            data-testid="photo-input"
-          />
-        </div>
-        <p className="text-xs text-slate-500">
-          JPG, PNG, GIF or WebP, up to 5 MB each. The first photo is the cover shown on
-          product cards.
-        </p>
-        {images.length > 0 ? (
-          <ul className="grid grid-cols-3 gap-3 sm:grid-cols-4">
-            {images.map((url, index) => (
-              <li
-                key={url}
-                className="group relative aspect-square overflow-hidden rounded-lg border border-slate-700 bg-slate-800"
-              >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={url} alt={`Photo ${index + 1}`} className="h-full w-full object-cover" />
-                {index === 0 && (
-                  <span className="absolute left-1 top-1 rounded bg-amber-500 px-1.5 py-0.5 text-[10px] font-semibold text-slate-950">
-                    Cover
-                  </span>
-                )}
-                <div className="absolute inset-x-0 bottom-0 flex justify-between gap-1 bg-slate-950/80 p-1 text-[11px]">
-                  {index > 0 ? (
-                    <button
-                      type="button"
-                      onClick={() => makeCover(url)}
-                      className="text-amber-400 hover:underline"
-                    >
-                      Make cover
-                    </button>
-                  ) : (
-                    <span />
-                  )}
-                  <button
-                    type="button"
-                    onClick={() => removeImage(url)}
-                    className="text-red-400 hover:underline"
-                  >
-                    Remove
-                  </button>
-                </div>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p className="rounded-lg border border-dashed border-slate-700 p-4 text-center text-sm text-slate-500">
-            No photos yet
-          </p>
-        )}
-      </div>
+      <PhotoPicker
+        label="Photos"
+        images={images}
+        onChange={setImages}
+        onUploadingChange={(uploading) =>
+          setActiveUploads((count) => count + (uploading ? 1 : -1))
+        }
+        hint="JPG, PNG, GIF or WebP, up to 5 MB each. The first photo is the cover shown on product cards."
+      />
 
       {error && <p className="text-sm text-red-400">{error}</p>}
-      <button type="submit" disabled={submitting || uploading} className="btn-primary">
+      <button type="submit" disabled={submitting || activeUploads > 0} className="btn-primary">
         {submitting ? "Saving..." : "Save product"}
       </button>
     </form>

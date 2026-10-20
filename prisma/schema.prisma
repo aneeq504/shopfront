@@ -25,11 +25,14 @@ model Product {
 model ProductImage {
   id        String  @id @default(cuid())
   productId String
+  colorId   String?
   url       String
   position  Int     @default(0)
   product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  color     ProductColor? @relation(fields: [colorId], references: [id], onDelete: Cascade)
 
   @@index([productId, position])
+  @@index([colorId, position])
 }
 
 model ProductColor {
@@ -39,6 +42,7 @@ model ProductColor {
   stock     Int     @default(0)
   position  Int     @default(0)
   product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  images    ProductImage[]
 
   @@unique([productId, name])
   @@index([productId, position])
