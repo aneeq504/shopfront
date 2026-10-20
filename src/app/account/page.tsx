@@ -4,7 +4,7 @@ import { ProfileForm } from "@/components/account/ProfileForm";
 import { SignOutButton } from "@/components/account/SignOutButton";
 import { currentCustomer } from "@/lib/customer-auth";
 import { formatPrice } from "@/lib/format";
-import { orderState, orderStateClasses, orderStateLabel } from "@/lib/orders";
+import { formatDateTime, orderState, orderStateClasses, orderStateLabel } from "@/lib/orders";
 import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
@@ -65,7 +65,7 @@ export default async function AccountPage() {
                   <div className="flex justify-between gap-4 text-muted">
                     <span>
                       {order.items.length} item(s) &middot;{" "}
-                      {order.createdAt.toLocaleString("en-GB", { timeZone: "UTC" })}
+                      {formatDateTime(order.createdAt)}
                     </span>
                     <span>{formatPrice(order.totalCents)}</span>
                   </div>

@@ -51,5 +51,15 @@ export function hoursLeftToCancel(createdAt: Date): number {
 }
 
 export function formatDateTime(date: Date): string {
-  return date.toLocaleString("en-GB", { timeZone: "UTC" }) + " UTC";
+  return new Intl.DateTimeFormat("en-GB", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+    timeZone: "Asia/Karachi",
+  })
+    .format(date)
+    .replace(/\b(am|pm)\b/, (meridiem) => meridiem.toUpperCase());
 }
