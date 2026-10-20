@@ -143,7 +143,7 @@ export function buildOrderConfirmedEmail(order: EmailOrder) {
     `Hi ${order.customerName},`,
     "",
     `Your order #${number} is confirmed.`,
-    "Your order is confirmed and will be dispatched soon.",
+    "It will be dispatched soon.",
     "",
     "Items:",
     ...itemText(order.items),
