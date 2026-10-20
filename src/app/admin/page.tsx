@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { AdminProductRow } from "@/components/admin/AdminProductRow";
+import { AdminProductList } from "@/components/admin/AdminProductList";
 import { AdminEmailForm } from "@/components/admin/AdminEmailForm";
 import { AdminPasswordForm } from "@/components/admin/AdminPasswordForm";
 import { AdminOrderActions } from "@/components/admin/AdminOrderActions";
@@ -27,7 +27,7 @@ export default async function AdminPage() {
 
   const [products, orders, reviews, ownerEmail] = await Promise.all([
     prisma.product.findMany({
-      orderBy: { createdAt: "desc" },
+      orderBy: [{ position: "asc" }, { createdAt: "desc" }],
       include: { colors: { orderBy: { position: "asc" } } },
     }),
     prisma.order.findMany({ orderBy: { createdAt: "desc" }, include: { items: true } }),
@@ -64,25 +64,16 @@ export default async function AdminPage() {
 
       <section className="flex flex-col gap-3">
         <h2 className="font-display text-2xl font-bold">Products ({products.length})</h2>
-        <div className="card divide-y divide-ink/10">
-          {products.length === 0 ? (
-            <p className="p-6 text-sm text-muted">No products yet.</p>
-          ) : (
-            products.map((product) => (
-              <AdminProductRow
-                key={`${product.id}:${product.stock}`}
-                product={{
-                  id: product.id,
-                  name: product.name,
-                  price: formatPrice(product.priceCents),
-                  stock: product.stock,
-                  category: product.category,
-                  colors: product.colors.map(({ name, stock }) => ({ name, stock })),
-                }}
-              />
-            ))
-          )}
-        </div>
+        <AdminProductList
+          products={products.map((product) => ({
+            id: product.id,
+            name: product.name,
+            price: formatPrice(product.priceCents),
+            stock: product.stock,
+            category: product.category,
+            colors: product.colors.map(({ name, stock }) => ({ name, stock })),
+          }))}
+        />
       </section>
 
       <section className="flex flex-col gap-3">

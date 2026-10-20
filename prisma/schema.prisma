@@ -15,12 +15,15 @@ model Product {
   imageUrl    String      @default("")
   stock       Int         @default(0)
   category    String      @default("General")
+  position    Int         @default(0)
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
   orderItems  OrderItem[]
   images      ProductImage[]
   colors      ProductColor[]
   reviews     Review[]
+
+  @@index([position])
 }
 
 model ProductImage {

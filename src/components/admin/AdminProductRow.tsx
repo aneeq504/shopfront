@@ -2,19 +2,23 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { type ReactNode, useState } from "react";
+
+export type AdminProduct = {
+  id: string;
+  name: string;
+  price: string;
+  stock: number;
+  category: string;
+  colors: { name: string; stock: number }[];
+};
 
 export function AdminProductRow({
   product,
+  dragHandle,
 }: {
-  product: {
-    id: string;
-    name: string;
-    price: string;
-    stock: number;
-    category: string;
-    colors: { name: string; stock: number }[];
-  };
+  product: AdminProduct;
+  dragHandle?: ReactNode;
 }) {
   const router = useRouter();
   const [error, setError] = useState("");
@@ -56,6 +60,7 @@ export function AdminProductRow({
 
   return (
     <div className="flex flex-wrap items-center gap-4 p-4 text-sm">
+      {dragHandle}
       <div className="min-w-48 flex-1">
         <p className="font-display text-lg font-semibold text-ink">{product.name}</p>
         <p className="text-muted">

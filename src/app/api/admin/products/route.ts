@@ -13,8 +13,11 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: parsed.error }, { status: 400 });
   }
 
+  const { _min } = await prisma.product.aggregate({
+    _min: { position: true },
+  });
   const product = await prisma.product.create({
-    data: productData(parsed.data),
+    data: { ...productData(parsed.data), position: (_min.position ?? 0) - 1 },
     include: { colors: { orderBy: { position: "asc" }, select: { id: true } } },
   });
   const colorImages = parsed.data.colors.flatMap((color, index) =>

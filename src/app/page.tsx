@@ -21,7 +21,7 @@ export default async function HomePage({
       ...(q ? { name: { contains: q } } : {}),
       ...(category ? { category } : {}),
     },
-    orderBy: { createdAt: "desc" },
+    orderBy: [{ position: "asc" }, { createdAt: "desc" }],
     include: { _count: { select: { colors: true } } },
   });
 
