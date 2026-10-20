@@ -70,31 +70,6 @@ export default async function HomePage({
         </div>
       </section>
 
-      <form className="flex gap-2">
-        <label className="relative flex-1">
-          <span className="sr-only">Search products</span>
-          <svg
-            aria-hidden="true"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted"
-          >
-            <circle cx="11" cy="11" r="7" />
-            <path strokeLinecap="round" d="m16 16 4 4" />
-          </svg>
-          <input
-            type="search"
-            name="q"
-            defaultValue={q}
-            placeholder="Search products..."
-            className="input w-full rounded-full pl-12 text-sm"
-          />
-        </label>
-        <button className="btn-primary text-sm">Search</button>
-      </form>
-
       {categories.length > 0 && (
         <div className="flex flex-wrap gap-2">
           <Link
