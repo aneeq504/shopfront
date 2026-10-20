@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ProductCard } from "@/components/ProductCard";
 import { Heart, Mascot, Sparkle, Squiggle, Star, Truck } from "@/components/Doodles";
 import { prisma } from "@/lib/prisma";
+import { ratingSummaries } from "@/lib/reviews";
 
 export const dynamic = "force-dynamic";
 
@@ -27,6 +28,7 @@ export default async function HomePage({
   const categories = (
     await prisma.product.groupBy({ by: ["category"], orderBy: { category: "asc" } })
   ).map((row) => row.category);
+  const summaries = await ratingSummaries(products.map((product) => product.id));
 
   return (
     <div className="flex flex-col gap-8">
@@ -117,7 +119,12 @@ export default async function HomePage({
             {products.map((product) => (
               <ProductCard
                 key={product.id}
-                product={{ ...product, colorCount: product._count.colors }}
+                product={{
+                  ...product,
+                  colorCount: product._count.colors,
+                  ratingAverage: summaries.get(product.id)?.average ?? 0,
+                  ratingCount: summaries.get(product.id)?.count ?? 0,
+                }}
               />
             ))}
           </div>

@@ -20,6 +20,7 @@ model Product {
   orderItems  OrderItem[]
   images      ProductImage[]
   colors      ProductColor[]
+  reviews     Review[]
 }
 
 model ProductImage {
@@ -59,6 +60,22 @@ model Customer {
   createdAt      DateTime @default(now())
   orders         Order[]
   notifications  Notification[]
+  reviews        Review[]
+}
+
+model Review {
+  id         String   @id @default(cuid())
+  productId  String
+  customerId String
+  rating     Int
+  comment    String   @default("")
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  customer   Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+
+  @@unique([productId, customerId])
+  @@index([productId, createdAt])
 }
 
 model VerificationCode {

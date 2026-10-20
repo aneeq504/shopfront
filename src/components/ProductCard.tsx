@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { formatPrice } from "@/lib/format";
 import { AddToCartButton } from "./AddToCartButton";
+import { Stars } from "./Stars";
 
 export type ProductCardData = {
   id: string;
@@ -10,6 +11,8 @@ export type ProductCardData = {
   stock: number;
   category: string;
   colorCount: number;
+  ratingAverage: number;
+  ratingCount: number;
 };
 
 const imageTints = [
@@ -67,6 +70,12 @@ export function ProductCard({ product }: { product: ProductCardData }) {
         >
           {product.name}
         </Link>
+        {product.ratingCount > 0 && (
+          <div className="flex items-center gap-1.5">
+            <Stars rating={product.ratingAverage} size="sm" />
+            <span className="text-xs text-muted">({product.ratingCount})</span>
+          </div>
+        )}
         <p className="font-display text-xl font-bold text-coralDark">
           {formatPrice(product.priceCents)}
         </p>

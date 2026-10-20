@@ -4,8 +4,10 @@ import { AdminProductRow } from "@/components/admin/AdminProductRow";
 import { AdminEmailForm } from "@/components/admin/AdminEmailForm";
 import { AdminPasswordForm } from "@/components/admin/AdminPasswordForm";
 import { AdminOrderActions } from "@/components/admin/AdminOrderActions";
+import { AdminReviewDeleteButton } from "@/components/admin/AdminReviewDeleteButton";
 import { LogoutButton } from "@/components/admin/LogoutButton";
 import { SalesOverview } from "@/components/admin/SalesOverview";
+import { Stars } from "@/components/Stars";
 import { adminEmail, isAdmin } from "@/lib/auth";
 import { formatPrice } from "@/lib/format";
 import {
@@ -23,12 +25,20 @@ export const dynamic = "force-dynamic";
 export default async function AdminPage() {
   if (!isAdmin()) redirect("/admin/login");
 
-  const [products, orders, ownerEmail] = await Promise.all([
+  const [products, orders, reviews, ownerEmail] = await Promise.all([
     prisma.product.findMany({
       orderBy: { createdAt: "desc" },
       include: { colors: { orderBy: { position: "asc" } } },
     }),
     prisma.order.findMany({ orderBy: { createdAt: "desc" }, include: { items: true } }),
+    prisma.review.findMany({
+      take: 50,
+      orderBy: { createdAt: "desc" },
+      include: {
+        product: { select: { id: true, name: true } },
+        customer: { select: { name: true, email: true } },
+      },
+    }),
     adminEmail(),
   ]);
 
@@ -122,6 +132,37 @@ export default async function AdminPage() {
               </div>
               );
             })
+          )}
+        </div>
+      </section>
+
+      <section className="flex flex-col gap-3">
+        <h2 className="font-display text-2xl font-bold">Reviews</h2>
+        <div className="card divide-y divide-ink/10">
+          {reviews.length === 0 ? (
+            <p className="p-6 text-sm text-muted">No reviews yet.</p>
+          ) : (
+            reviews.map((review) => (
+              <div key={review.id} className="flex flex-col gap-2 p-4 text-sm">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <Link
+                    href={`/products/${review.product.id}`}
+                    className="font-semibold text-coralDark hover:underline"
+                  >
+                    {review.product.name}
+                  </Link>
+                  <Stars rating={review.rating} size="sm" />
+                </div>
+                <span className="text-muted">
+                  {review.customer.name} &middot; {review.customer.email}
+                </span>
+                <p className="whitespace-pre-line text-ink/80">
+                  {review.comment || "No comment"}
+                </p>
+                <span className="text-xs text-muted">{formatDateTime(review.createdAt)}</span>
+                <AdminReviewDeleteButton reviewId={review.id} />
+              </div>
+            ))
           )}
         </div>
       </section>
