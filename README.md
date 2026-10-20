@@ -39,6 +39,7 @@ Customer:
 - Order status: an order can be cancelled from its page for 24 hours (stock is returned); after that it is "Confirmed — awaiting dispatch" until the owner marks it "Shipped" and then "Delivered"
 
 Owner (admin only):
+- Sales overview: sales, orders, items sold and delivered (cash collected) amounts for today (from midnight Pakistan time), the last 7, 30 and 90 days, orders older than 90 days, and all time; cancelled orders are excluded
 - Two-step login at `/admin/login`: the admin password, then a 6-digit code emailed to the owner email (10-minute expiry, 5 attempts, single use)
 - Change the admin password from `/admin` (current password + a code sent to the owner email), or reset it from "Forgot password?" on `/admin/login` (a code sent to the owner email). The new password is stored hashed in the database and replaces `ADMIN_PASSWORD`
 - Change the owner email from `/admin`: needs the admin password and a 6-digit code sent to the new address; the old address gets a notice. The saved address overrides `ADMIN_EMAIL`

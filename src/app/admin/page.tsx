@@ -5,6 +5,7 @@ import { AdminEmailForm } from "@/components/admin/AdminEmailForm";
 import { AdminPasswordForm } from "@/components/admin/AdminPasswordForm";
 import { AdminOrderActions } from "@/components/admin/AdminOrderActions";
 import { LogoutButton } from "@/components/admin/LogoutButton";
+import { SalesOverview } from "@/components/admin/SalesOverview";
 import { adminEmail, isAdmin } from "@/lib/auth";
 import { formatPrice } from "@/lib/format";
 import {
@@ -15,6 +16,7 @@ import {
   orderStateLabel,
 } from "@/lib/orders";
 import { prisma } from "@/lib/prisma";
+import { salesOverview } from "@/lib/sales";
 
 export const dynamic = "force-dynamic";
 
@@ -41,6 +43,8 @@ export default async function AdminPage() {
           <LogoutButton />
         </div>
       </div>
+
+      <SalesOverview periods={salesOverview(orders)} />
 
       <AdminEmailForm currentEmail={ownerEmail ?? ""} />
       <AdminPasswordForm />
