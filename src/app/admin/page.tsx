@@ -9,7 +9,7 @@ import { LogoutButton } from "@/components/admin/LogoutButton";
 import { SalesOverview } from "@/components/admin/SalesOverview";
 import { Stars } from "@/components/Stars";
 import { adminEmail, isAdmin } from "@/lib/auth";
-import { formatPrice } from "@/lib/format";
+import { formatDate, formatPrice } from "@/lib/format";
 import {
   cancellableUntil,
   formatDateTime,
@@ -159,7 +159,7 @@ export default async function AdminPage() {
                 <p className="whitespace-pre-line text-ink/80">
                   {review.comment || "No comment"}
                 </p>
-                <span className="text-xs text-muted">{formatDateTime(review.createdAt)}</span>
+                <span className="text-xs text-muted">{formatDate(review.createdAt)}</span>
                 <AdminReviewDeleteButton reviewId={review.id} />
               </div>
             ))

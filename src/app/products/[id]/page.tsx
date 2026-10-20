@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { ProductDetail } from "@/components/ProductDetail";
 import { ReviewSection } from "@/components/ReviewSection";
 import { currentCustomer } from "@/lib/customer-auth";
-import { formatDateTime } from "@/lib/orders";
+import { formatDate } from "@/lib/format";
 import { prisma } from "@/lib/prisma";
 import { canReview, firstName, ratingSummaries } from "@/lib/reviews";
 
@@ -77,7 +77,7 @@ export default async function ProductPage({
           name: firstName(review.customer.name),
           rating: review.rating,
           comment: review.comment,
-          date: formatDateTime(review.createdAt),
+          date: formatDate(review.createdAt),
         }))}
         viewer={!customer ? "signedOut" : eligible ? "eligible" : "ineligible"}
         ownReview={ownReview}

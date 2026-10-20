@@ -68,13 +68,13 @@ export function Header({
 
   return (
     <header className="sticky top-0 z-40 border-b-2 border-ink bg-cream">
-      <div className="mx-auto max-w-[1600px] px-4 py-3 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between gap-4">
+      <div className="mx-auto max-w-[1600px] px-3 py-3 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between gap-0.5 sm:gap-4">
           <Link
             href="/"
-            className="flex shrink-0 items-center gap-2 font-display text-xl font-bold tracking-tight sm:text-2xl"
+            className="flex shrink-0 items-center gap-1 font-display text-base font-bold tracking-tight sm:gap-2 sm:text-2xl"
           >
-            <Mascot className="h-9 w-9" />
+            <Mascot className="h-8 w-8 sm:h-9 sm:w-9" />
             <span>
               <span className="text-coralDark">Shop</span>
               <span className="text-ink">Front</span>
@@ -87,12 +87,18 @@ export function Header({
               <HeaderSearch className="mx-auto w-full max-w-2xl" />
             </Suspense>
           </div>
-          <nav className="flex shrink-0 items-center gap-1 text-xs sm:gap-2 sm:text-sm">
-            <Link href="/" className="rounded-full px-2 py-1.5 font-semibold transition hover:bg-butter sm:px-3">
+          <nav className="flex shrink-0 items-center gap-0.5 text-[11px] sm:gap-2 sm:text-sm">
+            <Link
+              href="/"
+              className="hidden rounded-full px-2 py-1.5 font-semibold transition hover:bg-butter sm:inline-flex sm:px-3"
+            >
               Products
             </Link>
             {isAdmin && (
-              <Link href="/admin" className="rounded-full px-2 py-1.5 font-semibold transition hover:bg-butter sm:px-3">
+              <Link
+                href="/admin"
+                className="rounded-full px-1 py-1.5 font-semibold transition hover:bg-butter sm:px-3"
+              >
                 Admin
               </Link>
             )}
@@ -101,14 +107,36 @@ export function Header({
             )}
             <Link
               href={customerName ? "/account" : "/account/login"}
-              className="max-w-24 truncate rounded-full px-2 py-1.5 font-semibold transition hover:bg-butter sm:max-w-none sm:px-3"
+              aria-label={customerName ?? undefined}
+              className={`flex shrink-0 items-center justify-center rounded-full font-semibold transition hover:bg-butter ${
+                customerName
+                  ? "h-8 w-8 p-0 sm:h-auto sm:w-auto sm:px-3 sm:py-1.5"
+                  : "px-2 py-1.5 sm:px-3"
+              }`}
             >
-              {customerName ? customerName.split(" ")[0] : "Sign in"}
+              {customerName ? (
+                <>
+                  <span className="hidden sm:inline">{customerName.split(" ")[0]}</span>
+                  <svg
+                    aria-hidden="true"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    className="h-4 w-4 sm:hidden"
+                  >
+                    <circle cx="12" cy="8" r="3.5" />
+                    <path strokeLinecap="round" d="M5 20c.7-3.5 3.2-5.5 7-5.5s6.3 2 7 5.5" />
+                  </svg>
+                </>
+              ) : (
+                "Sign in"
+              )}
             </Link>
             <Link
               href="/cart"
               aria-label={`Cart (${totalQuantity})`}
-              className="btn-primary flex items-center gap-1.5 px-2.5 py-1.5 text-xs sm:gap-2 sm:px-4 sm:text-sm"
+              className="btn-primary flex items-center gap-1 px-2 py-1.5 text-[11px] sm:gap-2 sm:px-4 sm:text-sm"
             >
               <svg
                 aria-hidden="true"
