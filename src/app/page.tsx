@@ -138,7 +138,7 @@ export default async function HomePage({
             <p className="text-sm text-muted">Try another search or browse all the happy things.</p>
           </div>
         ) : (
-          <div className="product-grid grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+          <div className="product-grid grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
             {products.map((product) => (
               <ProductCard
                 key={product.id}
