@@ -67,7 +67,7 @@ export function Header({
   const { totalQuantity } = useCart();
 
   return (
-    <header className="sticky top-0 z-40 border-b-2 border-ink bg-cream/85 backdrop-blur">
+    <header className="sticky top-0 z-40 border-b-2 border-ink bg-cream">
       <div className="mx-auto max-w-[1600px] px-4 py-3 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between gap-4">
           <Link
